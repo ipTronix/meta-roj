@@ -1,7 +1,7 @@
 Index: git/arch/arm/boot/dts/Makefile
 ===================================================================
---- git.orig/arch/arm/boot/dts/Makefile	2015-02-03 14:30:48.398426900 +0100
-+++ git/arch/arm/boot/dts/Makefile	2015-02-03 14:32:37.010426900 +0100
+--- git.orig/arch/arm/boot/dts/Makefile	2015-02-04 18:23:10.526426900 +0100
++++ git/arch/arm/boot/dts/Makefile	2015-02-04 18:25:03.938426900 +0100
 @@ -113,6 +113,7 @@
  	imx53-mba53.dtb \
  	imx53-qsb.dtb \
@@ -21,7 +21,7 @@ Index: git/arch/arm/boot/dts/Makefile
 Index: git/arch/arm/boot/dts/imx6dl-roj.dts
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/arch/arm/boot/dts/imx6dl-roj.dts	2015-02-03 14:32:37.010426900 +0100
++++ git/arch/arm/boot/dts/imx6dl-roj.dts	2015-02-04 18:25:03.938426900 +0100
 @@ -0,0 +1,30 @@
 +/*
 + * Copyright (C) 2013 Freescale Semiconductor, Inc.
@@ -56,7 +56,7 @@ Index: git/arch/arm/boot/dts/imx6dl-roj.dts
 Index: git/arch/arm/boot/dts/imx6q-roj-ecspi.dts
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/arch/arm/boot/dts/imx6q-roj-ecspi.dts	2015-02-03 14:32:37.010426900 +0100
++++ git/arch/arm/boot/dts/imx6q-roj-ecspi.dts	2015-02-04 18:25:03.938426900 +0100
 @@ -0,0 +1,40 @@
 +/*
 + * Copyright (C) 2013 Freescale Semiconductor, Inc.
@@ -101,7 +101,7 @@ Index: git/arch/arm/boot/dts/imx6q-roj-ecspi.dts
 Index: git/arch/arm/boot/dts/imx6q-roj-flexcan1.dts
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/arch/arm/boot/dts/imx6q-roj-flexcan1.dts	2015-02-03 14:32:37.010426900 +0100
++++ git/arch/arm/boot/dts/imx6q-roj-flexcan1.dts	2015-02-04 18:25:03.938426900 +0100
 @@ -0,0 +1,18 @@
 +/*
 + * Copyright (C) 2013 Freescale Semiconductor, Inc.
@@ -124,7 +124,7 @@ Index: git/arch/arm/boot/dts/imx6q-roj-flexcan1.dts
 Index: git/arch/arm/boot/dts/imx6q-roj-gpmi-weim.dts
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/arch/arm/boot/dts/imx6q-roj-gpmi-weim.dts	2015-02-03 14:32:37.010426900 +0100
++++ git/arch/arm/boot/dts/imx6q-roj-gpmi-weim.dts	2015-02-04 18:25:03.938426900 +0100
 @@ -0,0 +1,49 @@
 +/*
 + * Copyright (C) 2013 Freescale Semiconductor, Inc.
@@ -178,8 +178,8 @@ Index: git/arch/arm/boot/dts/imx6q-roj-gpmi-weim.dts
 Index: git/arch/arm/boot/dts/imx6q-roj.dts
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/arch/arm/boot/dts/imx6q-roj.dts	2015-02-03 14:32:37.010426900 +0100
-@@ -0,0 +1,128 @@
++++ git/arch/arm/boot/dts/imx6q-roj.dts	2015-02-04 18:25:03.938426900 +0100
+@@ -0,0 +1,129 @@
 +/*
 + * Copyright 2012 Freescale Semiconductor, Inc.
 + * Copyright 2011 Linaro Ltd.
@@ -308,10 +308,11 @@ Index: git/arch/arm/boot/dts/imx6q-roj.dts
 +&sata {
 +	status = "okay";
 +};
++
 Index: git/arch/arm/boot/dts/imx6q-roj.dtsi
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/arch/arm/boot/dts/imx6q-roj.dtsi	2015-02-03 14:32:37.010426900 +0100
++++ git/arch/arm/boot/dts/imx6q-roj.dtsi	2015-02-04 18:25:03.938426900 +0100
 @@ -0,0 +1,235 @@
 +
 +/*
@@ -551,7 +552,7 @@ Index: git/arch/arm/boot/dts/imx6q-roj.dtsi
 Index: git/arch/arm/boot/dts/imx6qdl-roj-base.dtsi
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/arch/arm/boot/dts/imx6qdl-roj-base.dtsi	2015-02-04 13:12:11.338426900 +0100
++++ git/arch/arm/boot/dts/imx6qdl-roj-base.dtsi	2015-02-04 18:25:03.938426900 +0100
 @@ -0,0 +1,1431 @@
 +/*
 + * Copyright 2011 Freescale Semiconductor, Inc.
@@ -1987,8 +1988,8 @@ Index: git/arch/arm/boot/dts/imx6qdl-roj-base.dtsi
 Index: git/arch/arm/boot/dts/imx6qdl-roj.dtsi
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/arch/arm/boot/dts/imx6qdl-roj.dtsi	2015-02-04 13:13:37.726426900 +0100
-@@ -0,0 +1,377 @@
++++ git/arch/arm/boot/dts/imx6qdl-roj.dtsi	2015-02-04 20:09:35.030426900 +0100
+@@ -0,0 +1,403 @@
 +/*
 + * Copyright 2012 Freescale Semiconductor, Inc.
 + * Copyright 2011 Linaro Ltd.
@@ -2116,6 +2117,30 @@ Index: git/arch/arm/boot/dts/imx6qdl-roj.dtsi
 +		compatible = "fsl,mxc_v4l2_output";
 +		status = "okay";
 +	};
++
++        lcd@0 {
++                compatible = "fsl,lcd";
++                ipu_id = <0>;
++                disp_id = <0>;
++                default_ifmt = "RGB565";
++                pinctrl-names = "default";
++                pinctrl-0 = <&pinctrl_ipu1_1>;
++                status = "okay";
++        };
++
++	i2c@0 {
++               compatible = "i2c-gpio";
++               gpios = <&gpio1  10  0 /* sda */
++                       &gpio1 11 0 /* scl */
++               >;
++               i2c-gpio,sda-open-drain;
++               i2c-gpio,scl-open-drain;
++               i2c-gpio,delay-us = <5>;        /* ~100 kHz */
++               i2c-gpio,timeout-ms = <100>;
++               #address-cells = <1>;
++               #size-cells  = <0>;
++	};
++
 +};
 +
 +&audmux {
@@ -2279,6 +2304,8 @@ Index: git/arch/arm/boot/dts/imx6qdl-roj.dtsi
 +};
 +
 +&pcie {
++        reset-gpio = <&gpio1 6 0>;
++	wake-up-gpio = <&gpio2 5 0>;
 +	status = "okay";
 +};
 +
@@ -2360,8 +2387,8 @@ Index: git/arch/arm/boot/dts/imx6qdl-roj.dtsi
 +        pinctrl-1 = <&pinctrl_usdhc4_1_100mhz>;
 +        pinctrl-2 = <&pinctrl_usdhc4_1_200mhz>;
 +        bus-width = <8>;
-+/*        non-removable;*/
-+/*        no-1-8-v;*/
++	no-1-8-v;
++	non-removable;
 +        keep-power-in-suspend;
 +	enable-sdio-wakeup;
 +        status = "okay";

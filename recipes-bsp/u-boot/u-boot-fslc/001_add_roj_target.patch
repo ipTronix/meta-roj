@@ -984,7 +984,7 @@ Index: git/include/configs/mx6qroj.h
 +#elif defined CONFIG_MX6DL
 +#define CONFIG_DEFAULT_FDT_FILE	"zImage-imx6dl-roj.dtb"
 +#endif
-+#define CONFIG_MMCROOT			"/dev/mmcblk0p2"
++#define CONFIG_MMCROOT			"/dev/mmcblk1p2"
 +#define PHYS_SDRAM_SIZE		(1u * 1024 * 1024 * 1024)
 +
 +/* USB Configs */
