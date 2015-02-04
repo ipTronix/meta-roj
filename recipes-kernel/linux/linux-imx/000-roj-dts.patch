@@ -1,8 +1,8 @@
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index c5f9a19..43ba2e5 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -113,6 +113,7 @@ dtb-$(CONFIG_ARCH_MXC) += \
+Index: git/arch/arm/boot/dts/Makefile
+===================================================================
+--- git.orig/arch/arm/boot/dts/Makefile	2015-02-03 14:30:48.398426900 +0100
++++ git/arch/arm/boot/dts/Makefile	2015-02-03 14:32:37.010426900 +0100
+@@ -113,6 +113,7 @@
  	imx53-mba53.dtb \
  	imx53-qsb.dtb \
  	imx53-smd.dtb \
@@ -10,7 +10,7 @@ index c5f9a19..43ba2e5 100644
  	imx6dl-sabreauto.dtb \
  	imx6dl-sabreauto-ecspi.dtb \
  	imx6dl-sabreauto-flexcan1.dtb \
-@@ -122,6 +123,7 @@ dtb-$(CONFIG_ARCH_MXC) += \
+@@ -122,6 +123,7 @@
  	imx6dl-sabresd-ldo.dtb \
  	imx6dl-sabresd-pf200.dtb \
  	imx6dl-wandboard.dtb \
@@ -18,11 +18,10 @@ index c5f9a19..43ba2e5 100644
  	imx6q-arm2.dtb \
  	imx6q-sabreauto.dtb \
  	imx6q-sabreauto-ecspi.dtb \
-diff --git a/arch/arm/boot/dts/imx6dl-roj.dts b/arch/arm/boot/dts/imx6dl-roj.dts
-new file mode 100644
-index 0000000..56ecfc3
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6dl-roj.dts
+Index: git/arch/arm/boot/dts/imx6dl-roj.dts
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git/arch/arm/boot/dts/imx6dl-roj.dts	2015-02-03 14:32:37.010426900 +0100
 @@ -0,0 +1,30 @@
 +/*
 + * Copyright (C) 2013 Freescale Semiconductor, Inc.
@@ -54,11 +53,10 @@ index 0000000..56ecfc3
 +&mxcfb2 {
 +	status = "okay";
 +};
-diff --git a/arch/arm/boot/dts/imx6q-roj-ecspi.dts b/arch/arm/boot/dts/imx6q-roj-ecspi.dts
-new file mode 100644
-index 0000000..1d9cd11
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6q-roj-ecspi.dts
+Index: git/arch/arm/boot/dts/imx6q-roj-ecspi.dts
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git/arch/arm/boot/dts/imx6q-roj-ecspi.dts	2015-02-03 14:32:37.010426900 +0100
 @@ -0,0 +1,40 @@
 +/*
 + * Copyright (C) 2013 Freescale Semiconductor, Inc.
@@ -100,11 +98,10 @@ index 0000000..1d9cd11
 +	status = "okay";
 +	dr_mode = "peripheral";
 +};
-diff --git a/arch/arm/boot/dts/imx6q-roj-flexcan1.dts b/arch/arm/boot/dts/imx6q-roj-flexcan1.dts
-new file mode 100644
-index 0000000..7013e1e
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6q-roj-flexcan1.dts
+Index: git/arch/arm/boot/dts/imx6q-roj-flexcan1.dts
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git/arch/arm/boot/dts/imx6q-roj-flexcan1.dts	2015-02-03 14:32:37.010426900 +0100
 @@ -0,0 +1,18 @@
 +/*
 + * Copyright (C) 2013 Freescale Semiconductor, Inc.
@@ -124,11 +121,10 @@ index 0000000..7013e1e
 +	/* pin conflict with flexcan1 */
 +	status = "disabled";
 +};
-diff --git a/arch/arm/boot/dts/imx6q-roj-gpmi-weim.dts b/arch/arm/boot/dts/imx6q-roj-gpmi-weim.dts
-new file mode 100644
-index 0000000..97312ff
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6q-roj-gpmi-weim.dts
+Index: git/arch/arm/boot/dts/imx6q-roj-gpmi-weim.dts
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git/arch/arm/boot/dts/imx6q-roj-gpmi-weim.dts	2015-02-03 14:32:37.010426900 +0100
 @@ -0,0 +1,49 @@
 +/*
 + * Copyright (C) 2013 Freescale Semiconductor, Inc.
@@ -179,11 +175,10 @@ index 0000000..97312ff
 +	pinctrl-assert-gpios = <&gpio5 4 GPIO_ACTIVE_LOW>;
 +	status = "okay";
 +};
-diff --git a/arch/arm/boot/dts/imx6q-roj.dts b/arch/arm/boot/dts/imx6q-roj.dts
-new file mode 100644
-index 0000000..9eb6abb
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6q-roj.dts
+Index: git/arch/arm/boot/dts/imx6q-roj.dts
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git/arch/arm/boot/dts/imx6q-roj.dts	2015-02-03 14:32:37.010426900 +0100
 @@ -0,0 +1,128 @@
 +/*
 + * Copyright 2012 Freescale Semiconductor, Inc.
@@ -313,11 +308,10 @@ index 0000000..9eb6abb
 +&sata {
 +	status = "okay";
 +};
-diff --git a/arch/arm/boot/dts/imx6q-roj.dtsi b/arch/arm/boot/dts/imx6q-roj.dtsi
-new file mode 100644
-index 0000000..f12ac56
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6q-roj.dtsi
+Index: git/arch/arm/boot/dts/imx6q-roj.dtsi
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git/arch/arm/boot/dts/imx6q-roj.dtsi	2015-02-03 14:32:37.010426900 +0100
 @@ -0,0 +1,235 @@
 +
 +/*
@@ -554,12 +548,11 @@ index 0000000..f12ac56
 +		};
 +	};
 +};
-diff --git a/arch/arm/boot/dts/imx6qdl-roj-base.dtsi b/arch/arm/boot/dts/imx6qdl-roj-base.dtsi
-new file mode 100644
-index 0000000..be32877
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6qdl-roj-base.dtsi
-@@ -0,0 +1,1398 @@
+Index: git/arch/arm/boot/dts/imx6qdl-roj-base.dtsi
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git/arch/arm/boot/dts/imx6qdl-roj-base.dtsi	2015-02-04 13:12:11.338426900 +0100
+@@ -0,0 +1,1431 @@
 +/*
 + * Copyright 2011 Freescale Semiconductor, Inc.
 + * Copyright 2011 Linaro Ltd.
@@ -1948,6 +1941,39 @@ index 0000000..be32877
 +				MX6QDL_PAD_NANDF_ALE__SD4_RESET 0x17059
 +			>;
 +		};
++
++                pinctrl_usdhc4_1_100mhz: usdhc4grp-1-100mhz {
++                        fsl,pins = <
++                                MX6QDL_PAD_SD4_CMD__SD4_CMD     0x170B9
++                                MX6QDL_PAD_SD4_CLK__SD4_CLK     0x100B9
++                                MX6QDL_PAD_SD4_DAT0__SD4_DATA0  0x170B9
++                                MX6QDL_PAD_SD4_DAT1__SD4_DATA1  0x170B9
++                                MX6QDL_PAD_SD4_DAT2__SD4_DATA2  0x170B9
++                                MX6QDL_PAD_SD4_DAT3__SD4_DATA3  0x170B9
++                                MX6QDL_PAD_SD4_DAT4__SD4_DATA4  0x170B9
++                                MX6QDL_PAD_SD4_DAT5__SD4_DATA5  0x170B9
++                                MX6QDL_PAD_SD4_DAT6__SD4_DATA6  0x170B9
++                                MX6QDL_PAD_SD4_DAT7__SD4_DATA7  0x170B9
++                                MX6QDL_PAD_NANDF_ALE__SD4_RESET 0x170B9
++                        >;
++                };
++
++                pinctrl_usdhc4_1_200mhz: usdhc4grp-1-200mhz {
++                        fsl,pins = <
++                                MX6QDL_PAD_SD4_CMD__SD4_CMD     0x170F9
++                                MX6QDL_PAD_SD4_CLK__SD4_CLK     0x100F9
++                                MX6QDL_PAD_SD4_DAT0__SD4_DATA0  0x170F9
++                                MX6QDL_PAD_SD4_DAT1__SD4_DATA1  0x170F9
++                                MX6QDL_PAD_SD4_DAT2__SD4_DATA2  0x170F9
++                                MX6QDL_PAD_SD4_DAT3__SD4_DATA3  0x170F9
++                                MX6QDL_PAD_SD4_DAT4__SD4_DATA4  0x170F9
++                                MX6QDL_PAD_SD4_DAT5__SD4_DATA5  0x170F9
++                                MX6QDL_PAD_SD4_DAT6__SD4_DATA6  0x170F9
++                                MX6QDL_PAD_SD4_DAT7__SD4_DATA7  0x170F9
++                                MX6QDL_PAD_NANDF_ALE__SD4_RESET 0x170F9
++                        >;
++                };
++
 +	};
 +
 +	wdog {
@@ -1958,12 +1984,11 @@ index 0000000..be32877
 +		};
 +	};
 +};
-diff --git a/arch/arm/boot/dts/imx6qdl-roj.dtsi b/arch/arm/boot/dts/imx6qdl-roj.dtsi
-new file mode 100644
-index 0000000..c972cd9
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6qdl-roj.dtsi
-@@ -0,0 +1,370 @@
+Index: git/arch/arm/boot/dts/imx6qdl-roj.dtsi
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git/arch/arm/boot/dts/imx6qdl-roj.dtsi	2015-02-04 13:13:37.726426900 +0100
+@@ -0,0 +1,377 @@
 +/*
 + * Copyright 2012 Freescale Semiconductor, Inc.
 + * Copyright 2011 Linaro Ltd.
@@ -2302,6 +2327,10 @@ index 0000000..c972cd9
 +	status = "okay";
 +};
 +
++&usbh1 {
++        status = "okay";
++};
++
 +&usdhc1 {
 +        pinctrl-names = "default";
 +        pinctrl-0 = <&pinctrl_usdhc1_1>;
@@ -2326,12 +2355,14 @@ index 0000000..c972cd9
 +};
 +
 +&usdhc4 {
-+        pinctrl-names = "default";
++        pinctrl-names = "default", "state_100mhz", "state_200mhz";
 +        pinctrl-0 = <&pinctrl_usdhc4_1>;
++        pinctrl-1 = <&pinctrl_usdhc4_1_100mhz>;
++        pinctrl-2 = <&pinctrl_usdhc4_1_200mhz>;
 +        bus-width = <8>;
-+        non-removable;
-+        no-1-8-v;
++/*        non-removable;*/
++/*        no-1-8-v;*/
 +        keep-power-in-suspend;
++	enable-sdio-wakeup;
 +        status = "okay";
 +};
-+
