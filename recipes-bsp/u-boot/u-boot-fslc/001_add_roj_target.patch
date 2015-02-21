@@ -345,7 +345,7 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
 +++ git/board/freescale/mx6qroj/mx6qroj.c	2015-02-04 14:28:32.770426900 +0100
-@@ -0,0 +1,598 @@
+@@ -0,0 +1,608 @@
 +/*
 + * Copyright (C) 2012 Freescale Semiconductor, Inc.
 + *
@@ -843,6 +843,11 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +	0x01
 +};
 +
++static unsigned char CPLD_init_blob[] = {
++	0x10,
++	0xff
++};
++
 +int board_init(void)
 +{
 +	struct pmic *p;
@@ -861,10 +866,15 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +        gpio_direction_output(IMX_GPIO_NR(7,8),0);
 +        udelay(1);
 +        gpio_direction_output(IMX_GPIO_NR(7,8),1);
-+	/* USB HUB initialization */
-+	I2C_SET_BUS(2);
-+	i2c_write(0x2c,0,1,usb_init_blob, sizeof(usb_init_blob));
++	       /* USB HUB initialization */
++	       I2C_SET_BUS(2);
++	       i2c_write(0x2c,0,1,usb_init_blob, sizeof(usb_init_blob));
 +        i2c_write(0x2c,0xff,1,usb_init_blob2, sizeof(usb_init_blob2));
++	       /* Remove Carrier from Reset*/
++	       i2c_write(0x1,0,1,CPLD_init_blob, sizeof(CPLD_init_blob));
++	       /* Turn on LCD panel*/
++        gpio_direction_output(IMX_GPIO_NR(1, 0), 1); 
++        gpio_direction_output(IMX_GPIO_NR(1, 2), 1); 
 +
 +#if 0
 +	power_ltc3676_init(2);
