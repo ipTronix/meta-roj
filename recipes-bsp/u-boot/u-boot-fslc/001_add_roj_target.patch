@@ -556,7 +556,7 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +	u32 dev_no;
 +
 +	/* BOOT_CFG2[3] and BOOT_CFG2[4] */
-+	dev_no = 2;//(soc_sbmr & 0x00001800) >> 11;
++	dev_no = (soc_sbmr & 0x00001800) >> 11;
 +
 +	/* need ubstract 1 to map to the mmc device id
 +	 * see the comments in board_mmc_init function
@@ -990,9 +990,9 @@ Index: git/include/configs/mx6qroj.h
 +#define CONFIG_MXC_UART_BASE	UART1_BASE
 +#define CONFIG_CONSOLE_DEV		"ttymxc0"
 +#if defined CONFIG_MX6Q
-+#define CONFIG_DEFAULT_FDT_FILE	"zImage-imx6q-roj.dtb"
++#define CONFIG_DEFAULT_FDT_FILE	"imx6q-roj.dtb"
 +#elif defined CONFIG_MX6DL
-+#define CONFIG_DEFAULT_FDT_FILE	"zImage-imx6dl-roj.dtb"
++#define CONFIG_DEFAULT_FDT_FILE	"imx6dl-roj.dtb"
 +#endif
 +#define CONFIG_MMCROOT			"/dev/mmcblk1p2"
 +#define PHYS_SDRAM_SIZE		(1u * 1024 * 1024 * 1024)
