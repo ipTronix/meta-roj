@@ -53,128 +53,6 @@ Index: git/arch/arm/boot/dts/imx6dl-roj.dts
 +&mxcfb2 {
 +	status = "okay";
 +};
-Index: git/arch/arm/boot/dts/imx6q-roj-ecspi.dts
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/arch/arm/boot/dts/imx6q-roj-ecspi.dts	2015-02-04 18:25:03.938426900 +0100
-@@ -0,0 +1,40 @@
-+/*
-+ * Copyright (C) 2013 Freescale Semiconductor, Inc.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License version 2 as
-+ * published by the Free Software Foundation.
-+ */
-+
-+#include "imx6q-roj.dts"
-+
-+&ecspi1 {
-+	pinctrl-assert-gpios = <&gpio5 4 GPIO_ACTIVE_LOW>;
-+	status = "okay";
-+};
-+
-+&flexcan2 {
-+	/* max7310_c on i2c3 is gone */
-+	status = "disabled";
-+};
-+
-+&i2c3 {
-+	/* pin conflict with ecspi1 */
-+	status = "disabled";
-+};
-+
-+&uart3 {
-+	/* the uart3 depends on the i2c3, so disable it too. */
-+	status = "disabled";
-+};
-+
-+&usbh1 {
-+	/* max7310_b on i2c3 is gone */
-+	status = "disabled";
-+};
-+
-+&usbotg {
-+	/* max7310_c on i2c3 is gone */
-+	status = "okay";
-+	dr_mode = "peripheral";
-+};
-Index: git/arch/arm/boot/dts/imx6q-roj-flexcan1.dts
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/arch/arm/boot/dts/imx6q-roj-flexcan1.dts	2015-02-04 18:25:03.938426900 +0100
-@@ -0,0 +1,18 @@
-+/*
-+ * Copyright (C) 2013 Freescale Semiconductor, Inc.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License version 2 as
-+ * published by the Free Software Foundation.
-+ */
-+
-+#include "imx6q-roj.dts"
-+
-+&flexcan1{
-+	status = "okay";
-+};
-+
-+&fec {
-+	/* pin conflict with flexcan1 */
-+	status = "disabled";
-+};
-Index: git/arch/arm/boot/dts/imx6q-roj-gpmi-weim.dts
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/arch/arm/boot/dts/imx6q-roj-gpmi-weim.dts	2015-02-04 18:25:03.938426900 +0100
-@@ -0,0 +1,49 @@
-+/*
-+ * Copyright (C) 2013 Freescale Semiconductor, Inc.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License version 2 as
-+ * published by the Free Software Foundation.
-+ */
-+
-+#include "imx6q-roj.dts"
-+
-+&ecspi1 {
-+	/* pin conflict with weim */
-+	status = "disabled";
-+};
-+
-+&flexcan2 {
-+	/* max7310_c on i2c3 is gone */
-+	status = "disabled";
-+};
-+
-+&gpmi {
-+	status = "okay";
-+};
-+
-+&i2c3 {
-+	/* pin conflict with weim */
-+	status = "disabled";
-+};
-+
-+&uart3 {
-+	/* pin conflict with gpmi and weim */
-+	status = "disabled";
-+};
-+
-+&usbh1 {
-+	/* max7310_b on i2c3 is gone */
-+	status = "disabled";
-+};
-+
-+&usbotg {
-+	/* max7310_c on i2c3 is gone */
-+	status = "okay";
-+	dr_mode = "peripheral";
-+};
-+
-+&weim {
-+	pinctrl-assert-gpios = <&gpio5 4 GPIO_ACTIVE_LOW>;
-+	status = "okay";
-+};
 Index: git/arch/arm/boot/dts/imx6q-roj.dts
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
@@ -1989,7 +1867,7 @@ Index: git/arch/arm/boot/dts/imx6qdl-roj.dtsi
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
 +++ git/arch/arm/boot/dts/imx6qdl-roj.dtsi	2015-02-04 20:09:35.030426900 +0100
-@@ -0,0 +1,403 @@
+@@ -0,0 +1,404 @@
 +/*
 + * Copyright 2012 Freescale Semiconductor, Inc.
 + * Copyright 2011 Linaro Ltd.
@@ -2374,8 +2252,9 @@ Index: git/arch/arm/boot/dts/imx6qdl-roj.dtsi
 +        pinctrl-0 = <&pinctrl_usdhc3_1>;
 +        pinctrl-1 = <&pinctrl_usdhc3_1_100mhz>;
 +        pinctrl-2 = <&pinctrl_usdhc3_1_200mhz>;
-+	non-removable;
-+	bus-width = <8>;
++        non-removable;
++        bus-width = <8>;
++        no-1-8-v;
 +        keep-power-in-suspend;
 +        enable-sdio-wakeup;
 +        status = "okay";
@@ -2386,10 +2265,10 @@ Index: git/arch/arm/boot/dts/imx6qdl-roj.dtsi
 +        pinctrl-0 = <&pinctrl_usdhc4_1>;
 +        pinctrl-1 = <&pinctrl_usdhc4_1_100mhz>;
 +        pinctrl-2 = <&pinctrl_usdhc4_1_200mhz>;
-+        bus-width = <8>;
-+	no-1-8-v;
-+	non-removable;
++        bus-width = <4>;
++        no-1-8-v;
++        non-removable;
 +        keep-power-in-suspend;
-+	enable-sdio-wakeup;
++        enable-sdio-wakeup;
 +        status = "okay";
 +};
