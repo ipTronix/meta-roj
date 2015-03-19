@@ -1194,7 +1194,7 @@ Index: git/include/configs/mx6roj_common.h
 +			"fi; "	\
 +		"fi\0" \
 +	EMMC_ENV	  \
-+ "mmcsetroot=setenv mmcroot /dev/mmcblk${mmcdev}p${mmcrootpart} rootwait rw" \
++ "mmcsetroot=setenv mmcroot /dev/mmcblk${mmcdev}p${mmcrootpart} rootwait rw\0" \
 +	"mmcargs=run mmcsetroot;setenv bootargs console=${console},${baudrate} " \
 +		"root=${mmcroot}\0" \
 +	"loadbootscript=" \
