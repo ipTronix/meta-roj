@@ -9,6 +9,7 @@ PRINC := "${@int(PRINC) + 2}"
 SRC_URI_append_mx6qroj = " \
    file://roj-dts.patch \
    file://ltc3676.patch \
-	 file://regulator.cfg \
+	 file://defconfig \
+   file://004-fix-mmc-addresses.patch \
 "
 

@@ -346,7 +346,7 @@ Index: git/board/roj/mx6qroj/mx6qroj.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
 +++ git/board/roj/mx6qroj/mx6qroj.c	2015-03-19 11:52:55.636073800 +0100
-@@ -0,0 +1,973 @@
+@@ -0,0 +1,977 @@
 +/*
 + * Copyright (C) 2012-2014 Freescale Semiconductor, Inc.
 + *
@@ -944,6 +944,10 @@ Index: git/board/roj/mx6qroj/mx6qroj.c
 +
 +int board_eth_init(bd_t *bis)
 +{
++	// reset PHY and ensure RX_DV is pulled high to enable TX_REF_CLK
++	gpio_direction_input(IMX_GPIO_NR(1,4));
++	udelay(50000);
++
 +	setup_iomux_enet();
 +
 +	return cpu_eth_init(bis);

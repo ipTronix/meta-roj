@@ -1,8 +1,8 @@
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index c5f9a19..43ba2e5 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -113,6 +113,7 @@ dtb-$(CONFIG_ARCH_MXC) += \
+Index: git/arch/arm/boot/dts/Makefile
+===================================================================
+--- git.orig/arch/arm/boot/dts/Makefile	2015-02-04 18:23:10.526426900 +0100
++++ git/arch/arm/boot/dts/Makefile	2015-02-04 18:25:03.938426900 +0100
+@@ -113,6 +113,7 @@
  	imx53-mba53.dtb \
  	imx53-qsb.dtb \
  	imx53-smd.dtb \
@@ -10,7 +10,7 @@ index c5f9a19..43ba2e5 100644
  	imx6dl-sabreauto.dtb \
  	imx6dl-sabreauto-ecspi.dtb \
  	imx6dl-sabreauto-flexcan1.dtb \
-@@ -122,6 +123,7 @@ dtb-$(CONFIG_ARCH_MXC) += \
+@@ -122,6 +123,7 @@
  	imx6dl-sabresd-ldo.dtb \
  	imx6dl-sabresd-pf200.dtb \
  	imx6dl-wandboard.dtb \
@@ -18,11 +18,10 @@ index c5f9a19..43ba2e5 100644
  	imx6q-arm2.dtb \
  	imx6q-sabreauto.dtb \
  	imx6q-sabreauto-ecspi.dtb \
-diff --git a/arch/arm/boot/dts/imx6dl-roj.dts b/arch/arm/boot/dts/imx6dl-roj.dts
-new file mode 100644
-index 0000000..56ecfc3
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6dl-roj.dts
+Index: git/arch/arm/boot/dts/imx6dl-roj.dts
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git/arch/arm/boot/dts/imx6dl-roj.dts	2015-02-04 18:25:03.938426900 +0100
 @@ -0,0 +1,30 @@
 +/*
 + * Copyright (C) 2013 Freescale Semiconductor, Inc.
@@ -54,137 +53,11 @@ index 0000000..56ecfc3
 +&mxcfb2 {
 +	status = "okay";
 +};
-diff --git a/arch/arm/boot/dts/imx6q-roj-ecspi.dts b/arch/arm/boot/dts/imx6q-roj-ecspi.dts
-new file mode 100644
-index 0000000..1d9cd11
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6q-roj-ecspi.dts
-@@ -0,0 +1,40 @@
-+/*
-+ * Copyright (C) 2013 Freescale Semiconductor, Inc.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License version 2 as
-+ * published by the Free Software Foundation.
-+ */
-+
-+#include "imx6q-roj.dts"
-+
-+&ecspi1 {
-+	pinctrl-assert-gpios = <&gpio5 4 GPIO_ACTIVE_LOW>;
-+	status = "okay";
-+};
-+
-+&flexcan2 {
-+	/* max7310_c on i2c3 is gone */
-+	status = "disabled";
-+};
-+
-+&i2c3 {
-+	/* pin conflict with ecspi1 */
-+	status = "disabled";
-+};
-+
-+&uart3 {
-+	/* the uart3 depends on the i2c3, so disable it too. */
-+	status = "disabled";
-+};
-+
-+&usbh1 {
-+	/* max7310_b on i2c3 is gone */
-+	status = "disabled";
-+};
-+
-+&usbotg {
-+	/* max7310_c on i2c3 is gone */
-+	status = "okay";
-+	dr_mode = "peripheral";
-+};
-diff --git a/arch/arm/boot/dts/imx6q-roj-flexcan1.dts b/arch/arm/boot/dts/imx6q-roj-flexcan1.dts
-new file mode 100644
-index 0000000..7013e1e
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6q-roj-flexcan1.dts
-@@ -0,0 +1,18 @@
-+/*
-+ * Copyright (C) 2013 Freescale Semiconductor, Inc.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License version 2 as
-+ * published by the Free Software Foundation.
-+ */
-+
-+#include "imx6q-roj.dts"
-+
-+&flexcan1{
-+	status = "okay";
-+};
-+
-+&fec {
-+	/* pin conflict with flexcan1 */
-+	status = "disabled";
-+};
-diff --git a/arch/arm/boot/dts/imx6q-roj-gpmi-weim.dts b/arch/arm/boot/dts/imx6q-roj-gpmi-weim.dts
-new file mode 100644
-index 0000000..97312ff
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6q-roj-gpmi-weim.dts
-@@ -0,0 +1,49 @@
-+/*
-+ * Copyright (C) 2013 Freescale Semiconductor, Inc.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License version 2 as
-+ * published by the Free Software Foundation.
-+ */
-+
-+#include "imx6q-roj.dts"
-+
-+&ecspi1 {
-+	/* pin conflict with weim */
-+	status = "disabled";
-+};
-+
-+&flexcan2 {
-+	/* max7310_c on i2c3 is gone */
-+	status = "disabled";
-+};
-+
-+&gpmi {
-+	status = "okay";
-+};
-+
-+&i2c3 {
-+	/* pin conflict with weim */
-+	status = "disabled";
-+};
-+
-+&uart3 {
-+	/* pin conflict with gpmi and weim */
-+	status = "disabled";
-+};
-+
-+&usbh1 {
-+	/* max7310_b on i2c3 is gone */
-+	status = "disabled";
-+};
-+
-+&usbotg {
-+	/* max7310_c on i2c3 is gone */
-+	status = "okay";
-+	dr_mode = "peripheral";
-+};
-+
-+&weim {
-+	pinctrl-assert-gpios = <&gpio5 4 GPIO_ACTIVE_LOW>;
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx6q-roj.dts b/arch/arm/boot/dts/imx6q-roj.dts
-new file mode 100644
-index 0000000..b4395fc
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6q-roj.dts
-@@ -0,0 +1,127 @@
+Index: git/arch/arm/boot/dts/imx6q-roj.dts
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git/arch/arm/boot/dts/imx6q-roj.dts	2015-02-04 18:25:03.938426900 +0100
+@@ -0,0 +1,129 @@
 +/*
 + * Copyright 2012 Freescale Semiconductor, Inc.
 + * Copyright 2011 Linaro Ltd.
@@ -213,7 +86,7 @@ index 0000000..b4395fc
 +       pu-supply = <&pu_dummy>; /* use pu_dummy if VDDSOC share with VDDPU */
 +};
 +
-+&i2c2 {
++&i2c3 {
 +       pcf8563: rtc@51 {
 +               compatible = "nxp,pcf8563";
 +               reg = <0x51>;
@@ -261,9 +134,9 @@ index 0000000..b4395fc
 +                       };
 +
 +                       ldo1_reg: ldo1 {
-+                               regulator-min-microvolt = <1207125>;
-+                               regulator-max-microvolt = <1207125>;
-+                               lltc,fb-voltage-divider = <133000 200000>;
++                               regulator-min-microvolt = <0>;
++                               regulator-max-microvolt = <0>;
++                               lltc,fb-voltage-divider = <0 0>;
 +                               regulator-boot-on;
 +                               regulator-always-on;
 +                       };
@@ -271,7 +144,7 @@ index 0000000..b4395fc
 +                       ldo2_reg: ldo2 {
 +                               regulator-min-microvolt = <2972500>;
 +                               regulator-max-microvolt = <2972500>;
-+                               lltc,fb-voltage-divider = <620000 200000>;
++                               lltc,fb-voltage-divider = <0 0>;
 +                               regulator-boot-on;
 +                               regulator-always-on;
 +                       };
@@ -279,13 +152,14 @@ index 0000000..b4395fc
 +                       ldo3_reg: ldo3 {
 +                               regulator-min-microvolt = <1800000>;
 +                               regulator-max-microvolt = <1800000>;
++                               lltc,fb-voltage-divider = <0 0>;
 +                               regulator-boot-on;
 +                       };
 +
 +                       ldo4_reg: ldo4 {
 +                               regulator-min-microvolt = <1207125>;
 +                               regulator-max-microvolt = <1207125>;
-+                               lltc,fb-voltage-divider = <133000 200000>;
++                               lltc,fb-voltage-divider = <0 0>;
 +                               regulator-boot-on;
 +                               regulator-always-on;
 +                       };
@@ -312,11 +186,11 @@ index 0000000..b4395fc
 +&sata {
 +	status = "okay";
 +};
-diff --git a/arch/arm/boot/dts/imx6q-roj.dtsi b/arch/arm/boot/dts/imx6q-roj.dtsi
-new file mode 100755
-index 0000000..f12ac56
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6q-roj.dtsi
++
+Index: git/arch/arm/boot/dts/imx6q-roj.dtsi
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git/arch/arm/boot/dts/imx6q-roj.dtsi	2015-02-04 18:25:03.938426900 +0100
 @@ -0,0 +1,235 @@
 +
 +/*
@@ -553,12 +427,11 @@ index 0000000..f12ac56
 +		};
 +	};
 +};
-diff --git a/arch/arm/boot/dts/imx6qdl-roj-base.dtsi b/arch/arm/boot/dts/imx6qdl-roj-base.dtsi
-new file mode 100755
-index 0000000..785d266
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6qdl-roj-base.dtsi
-@@ -0,0 +1,1393 @@
+Index: git/arch/arm/boot/dts/imx6qdl-roj-base.dtsi
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git/arch/arm/boot/dts/imx6qdl-roj-base.dtsi	2015-02-04 18:25:03.938426900 +0100
+@@ -0,0 +1,1431 @@
 +/*
 + * Copyright 2011 Freescale Semiconductor, Inc.
 + * Copyright 2011 Linaro Ltd.
@@ -1673,14 +1546,13 @@ index 0000000..785d266
 +				MX6QDL_PAD_RGMII_TD2__RGMII_TD2       0x1b0b0
 +				MX6QDL_PAD_RGMII_TD3__RGMII_TD3       0x1b0b0
 +				MX6QDL_PAD_RGMII_TX_CTL__RGMII_TX_CTL 0x1b0b0
-+				MX6QDL_PAD_ENET_REF_CLK__ENET_TX_CLK  0x1b0b0
 +				MX6QDL_PAD_RGMII_RXC__RGMII_RXC       0x1b0b0
 +				MX6QDL_PAD_RGMII_RD0__RGMII_RD0       0x1b0b0
 +				MX6QDL_PAD_RGMII_RD1__RGMII_RD1       0x1b0b0
 +				MX6QDL_PAD_RGMII_RD2__RGMII_RD2       0x1b0b0
 +				MX6QDL_PAD_RGMII_RD3__RGMII_RD3       0x1b0b0
 +				MX6QDL_PAD_RGMII_RX_CTL__RGMII_RX_CTL 0x1b0b0
-+				MX6QDL_PAD_GPIO_16__ENET_REF_CLK      0x4001b0a8
++				MX6QDL_PAD_ENET_REF_CLK__ENET_TX_CLK  0x4001b0a8
 +			>;
 +		};
 +	};
@@ -1746,6 +1618,12 @@ index 0000000..785d266
 +			fsl,pins = <
 +				MX6QDL_PAD_EIM_EB2__I2C2_SCL 0x4001b8b1
 +				MX6QDL_PAD_KEY_ROW3__I2C2_SDA 0x4001b8b1
++			>;
++		};
++		pinctrl_i2c2_2: i2c2grp-2 {
++			fsl,pins = <
++				MX6QDL_PAD_KEY_COL3__I2C2_SCL 0x4001b8b1
++				MX6QDL_PAD_EIM_D16__I2C2_SDA 0x4001b8b1
 +			>;
 +		};
 +	};
@@ -1942,6 +1820,39 @@ index 0000000..785d266
 +				MX6QDL_PAD_NANDF_ALE__SD4_RESET 0x17059
 +			>;
 +		};
++
++                pinctrl_usdhc4_1_100mhz: usdhc4grp-1-100mhz {
++                        fsl,pins = <
++                                MX6QDL_PAD_SD4_CMD__SD4_CMD     0x170B9
++                                MX6QDL_PAD_SD4_CLK__SD4_CLK     0x100B9
++                                MX6QDL_PAD_SD4_DAT0__SD4_DATA0  0x170B9
++                                MX6QDL_PAD_SD4_DAT1__SD4_DATA1  0x170B9
++                                MX6QDL_PAD_SD4_DAT2__SD4_DATA2  0x170B9
++                                MX6QDL_PAD_SD4_DAT3__SD4_DATA3  0x170B9
++                                MX6QDL_PAD_SD4_DAT4__SD4_DATA4  0x170B9
++                                MX6QDL_PAD_SD4_DAT5__SD4_DATA5  0x170B9
++                                MX6QDL_PAD_SD4_DAT6__SD4_DATA6  0x170B9
++                                MX6QDL_PAD_SD4_DAT7__SD4_DATA7  0x170B9
++                                MX6QDL_PAD_NANDF_ALE__SD4_RESET 0x170B9
++                        >;
++                };
++
++                pinctrl_usdhc4_1_200mhz: usdhc4grp-1-200mhz {
++                        fsl,pins = <
++                                MX6QDL_PAD_SD4_CMD__SD4_CMD     0x170F9
++                                MX6QDL_PAD_SD4_CLK__SD4_CLK     0x100F9
++                                MX6QDL_PAD_SD4_DAT0__SD4_DATA0  0x170F9
++                                MX6QDL_PAD_SD4_DAT1__SD4_DATA1  0x170F9
++                                MX6QDL_PAD_SD4_DAT2__SD4_DATA2  0x170F9
++                                MX6QDL_PAD_SD4_DAT3__SD4_DATA3  0x170F9
++                                MX6QDL_PAD_SD4_DAT4__SD4_DATA4  0x170F9
++                                MX6QDL_PAD_SD4_DAT5__SD4_DATA5  0x170F9
++                                MX6QDL_PAD_SD4_DAT6__SD4_DATA6  0x170F9
++                                MX6QDL_PAD_SD4_DAT7__SD4_DATA7  0x170F9
++                                MX6QDL_PAD_NANDF_ALE__SD4_RESET 0x170F9
++                        >;
++                };
++
 +	};
 +
 +	wdog {
@@ -1952,12 +1863,11 @@ index 0000000..785d266
 +		};
 +	};
 +};
-diff --git a/arch/arm/boot/dts/imx6qdl-roj.dtsi b/arch/arm/boot/dts/imx6qdl-roj.dtsi
-new file mode 100644
-index 0000000..0999ec3
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6qdl-roj.dtsi
-@@ -0,0 +1,368 @@
+Index: git/arch/arm/boot/dts/imx6qdl-roj.dtsi
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git/arch/arm/boot/dts/imx6qdl-roj.dtsi	2015-02-04 20:09:35.030426900 +0100
+@@ -0,0 +1,404 @@
 +/*
 + * Copyright 2012 Freescale Semiconductor, Inc.
 + * Copyright 2011 Linaro Ltd.
@@ -1992,9 +1902,9 @@ index 0000000..0999ec3
 +
 +	mxcfb1: fb@0 {
 +		compatible = "fsl,mxc_sdc_fb";
-+		disp_dev = "ldb";
++		disp_dev = "hdmi";
 +		interface_pix_fmt = "RGB24";
-+		mode_str ="LDB-XGA";
++		mode_str ="1920x1080M@60";
 +		default_bpp = <24>;
 +		int_clk = <0>;
 +		late_init = <0>;
@@ -2003,9 +1913,9 @@ index 0000000..0999ec3
 +
 +	mxcfb2: fb@1 {
 +		compatible = "fsl,mxc_sdc_fb";
-+		disp_dev = "hdmi";
++		disp_dev = "ldb";
 +		interface_pix_fmt = "RGB24";
-+		mode_str ="1920x1080M@60";
++		mode_str ="LDB-XGA";
 +		default_bpp = <24>;
 +		int_clk = <0>;
 +		late_init = <0>;
@@ -2085,6 +1995,30 @@ index 0000000..0999ec3
 +		compatible = "fsl,mxc_v4l2_output";
 +		status = "okay";
 +	};
++
++        lcd@0 {
++                compatible = "fsl,lcd";
++                ipu_id = <0>;
++                disp_id = <0>;
++                default_ifmt = "RGB565";
++                pinctrl-names = "default";
++                pinctrl-0 = <&pinctrl_ipu1_1>;
++                status = "okay";
++        };
++
++	i2c@0 {
++               compatible = "i2c-gpio";
++               gpios = <&gpio1  10  0 /* sda */
++                       &gpio1 11 0 /* scl */
++               >;
++               i2c-gpio,sda-open-drain;
++               i2c-gpio,scl-open-drain;
++               i2c-gpio,delay-us = <5>;        /* ~100 kHz */
++               i2c-gpio,timeout-ms = <100>;
++               #address-cells = <1>;
++               #size-cells  = <0>;
++	};
++
 +};
 +
 +&audmux {
@@ -2146,6 +2080,9 @@ index 0000000..0999ec3
 +&hdmi_video {
 +	fsl,phy_reg_vlev = <0x0294>;
 +	fsl,phy_reg_cksymtx = <0x800d>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_hdmi_hdcp_1>;
++	fsl,hdcp;
 +	status = "okay";
 +};
 +
@@ -2245,6 +2182,8 @@ index 0000000..0999ec3
 +};
 +
 +&pcie {
++        reset-gpio = <&gpio1 6 0>;
++	wake-up-gpio = <&gpio2 5 0>;
 +	status = "okay";
 +};
 +
@@ -2293,6 +2232,10 @@ index 0000000..0999ec3
 +	status = "okay";
 +};
 +
++&usbh1 {
++        status = "okay";
++};
++
 +&usdhc1 {
 +        pinctrl-names = "default";
 +        pinctrl-0 = <&pinctrl_usdhc1_1>;
@@ -2309,20 +2252,23 @@ index 0000000..0999ec3
 +        pinctrl-0 = <&pinctrl_usdhc3_1>;
 +        pinctrl-1 = <&pinctrl_usdhc3_1_100mhz>;
 +        pinctrl-2 = <&pinctrl_usdhc3_1_200mhz>;
-+	non-removable;
-+	bus-width = <8>;
++        non-removable;
++        bus-width = <8>;
++        no-1-8-v;
 +        keep-power-in-suspend;
 +        enable-sdio-wakeup;
 +        status = "okay";
 +};
 +
 +&usdhc4 {
-+        pinctrl-names = "default";
++        pinctrl-names = "default", "state_100mhz", "state_200mhz";
 +        pinctrl-0 = <&pinctrl_usdhc4_1>;
-+        bus-width = <8>;
-+        non-removable;
++        pinctrl-1 = <&pinctrl_usdhc4_1_100mhz>;
++        pinctrl-2 = <&pinctrl_usdhc4_1_200mhz>;
++        bus-width = <4>;
 +        no-1-8-v;
++        non-removable;
 +        keep-power-in-suspend;
++        enable-sdio-wakeup;
 +        status = "okay";
 +};
-+

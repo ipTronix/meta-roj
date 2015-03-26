@@ -139,7 +139,7 @@ index 5234d87..12c9ea0 100644
  obj-$(CONFIG_REGULATOR_MAX8649)	+= max8649.o
 diff --git a/drivers/regulator/ltc3676.c b/drivers/regulator/ltc3676.c
 new file mode 100644
-index 0000000..c485b56
+index 0000000..220260e
 --- /dev/null
 +++ b/drivers/regulator/ltc3676.c
 @@ -0,0 +1,507 @@
@@ -377,8 +377,8 @@ index 0000000..c485b56
 +		struct device_node *np = ltc3676_matches[i].of_node;
 +		u32 vdiv[2];
 +
-+		if (i == LTC3676_LDO3)
-+			continue;
++//		if (i == LTC3676_LDO3)
++//			continue;
 +		ret = of_property_read_u32_array(np, "lltc,fb-voltage-divider",
 +						 vdiv, 2);
 +		if (ret) {
@@ -595,7 +595,7 @@ index 0000000..c485b56
 +
 +		init_data = match_init_data(i);
 +
-+		if (i != LTC3676_LDO3) {
++/*		if (i != LTC3676_LDO3)*/ {
 +			/* skip unused (defined by r1=r2=0) */
 +			if (rdesc->r1 == 0 && rdesc->r2 == 0)
 +				continue;
@@ -618,14 +618,14 @@ index 0000000..c485b56
 +	}
 +
 +	regmap_write(ltc3676->regmap, LTC3676_CLIRQ, 0);
-+	ret = devm_request_threaded_irq(dev, client->irq, NULL, ltc3676_isr,
++/*	ret = devm_request_threaded_irq(dev, client->irq, NULL, ltc3676_isr,
 +					IRQF_TRIGGER_LOW | IRQF_ONESHOT,
 +					client->name, ltc3676);
 +	if (ret) {
 +		dev_err(dev, "Failed to request IRQ: %d\n", ret);
 +		return ret;
 +	}
-+
++*/
 +	return 0;
 +}
 +
