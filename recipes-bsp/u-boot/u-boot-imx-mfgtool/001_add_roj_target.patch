@@ -403,7 +403,7 @@ Index: git/board/roj/mx6qroj/mx6qroj.c
 +	PAD_CTL_SRE_FAST  | PAD_CTL_HYS)
 +
 +#define USDHC_PAD_CTRL (PAD_CTL_PUS_47K_UP |			\
-+	PAD_CTL_SPEED_LOW | PAD_CTL_DSE_80ohm |			\
++	PAD_CTL_SPEED_LOW | PAD_CTL_DSE_40ohm |			\
 +	PAD_CTL_SRE_FAST  | PAD_CTL_HYS)
 +
 +/*Need more drive strength for SD1 slot on base board*/
