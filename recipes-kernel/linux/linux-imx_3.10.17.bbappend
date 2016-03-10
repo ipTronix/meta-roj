@@ -13,6 +13,7 @@ SRC_URI_append_mx6qroj = " \
    file://003-add-WVGA-lcd-support.patch \
    file://004-fix-mmc-addresses.patch \
    file://005-fix-usb-errors.patch \
+   file://006-i210.patch \
    file://defconfig \
 "
 
