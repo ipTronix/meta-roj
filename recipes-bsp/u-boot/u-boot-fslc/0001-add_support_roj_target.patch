@@ -1,34 +1,68 @@
-Index: git/arch/arm/Kconfig
-===================================================================
---- git.orig/arch/arm/Kconfig	2015-02-04 13:37:29.702426900 +0100
-+++ git/arch/arm/Kconfig	2015-02-04 13:37:36.242426900 +0100
-@@ -396,6 +396,9 @@
+From 6ace6d215ac691115000856ba14582b8e6610c7f Mon Sep 17 00:00:00 2001
+From: Stefano Gurrieri <stefano.gurrieri@roj.com>
+Date: Wed, 25 May 2016 15:08:33 +0200
+Subject: [PATCH] add_support_roj_target
+
+---
+ arch/arm/cpu/armv7/mx6/Kconfig       |  11 +
+ board/freescale/mx6qroj/Kconfig      |  12 +
+ board/freescale/mx6qroj/MAINTAINERS  |   8 +
+ board/freescale/mx6qroj/Makefile     |   9 +
+ board/freescale/mx6qroj/imximage.cfg | 132 ++++++
+ board/freescale/mx6qroj/mx6dl.cfg    | 119 ++++++
+ board/freescale/mx6qroj/mx6qroj.c    | 791 +++++++++++++++++++++++++++++++++++
+ configs/mx6dlroj_defconfig           |   9 +
+ configs/mx6qroj_defconfig            |   9 +
+ include/configs/mx6qroj.h            |  90 ++++
+ include/configs/mx6roj_common.h      | 292 +++++++++++++
+ 11 files changed, 1482 insertions(+)
+ create mode 100644 board/freescale/mx6qroj/Kconfig
+ create mode 100644 board/freescale/mx6qroj/MAINTAINERS
+ create mode 100644 board/freescale/mx6qroj/Makefile
+ create mode 100644 board/freescale/mx6qroj/imximage.cfg
+ create mode 100644 board/freescale/mx6qroj/mx6dl.cfg
+ create mode 100644 board/freescale/mx6qroj/mx6qroj.c
+ create mode 100644 configs/mx6dlroj_defconfig
+ create mode 100644 configs/mx6qroj_defconfig
+ create mode 100644 include/configs/mx6qroj.h
+ create mode 100644 include/configs/mx6roj_common.h
+
+diff --git a/arch/arm/cpu/armv7/mx6/Kconfig b/arch/arm/cpu/armv7/mx6/Kconfig
+index 1bcd399..f81c7a0 100644
+--- a/arch/arm/cpu/armv7/mx6/Kconfig
++++ b/arch/arm/cpu/armv7/mx6/Kconfig
+@@ -87,6 +87,16 @@ config TARGET_MX6CUBOXI
  config TARGET_MX6QARM2
- 	bool "Support mx6qarm2"
+ 	bool "mx6qarm2"
  
 +config TARGET_MX6QROJ
-+        bool "Support mx6qroj"
++	bool "Support mx6qroj"
++	select DM
++	select DM_THERMAL
++
++config TARGET_MX6DLROJ
++	bool "Support mx6dlroj"
++	select DM
++	select DM_THERMAL
 +
  config TARGET_MX6QSABREAUTO
- 	bool "Support mx6qsabreauto"
- 
-@@ -631,6 +634,7 @@
- source "board/freescale/mx53loco/Kconfig"
- source "board/freescale/mx53smd/Kconfig"
+ 	bool "mx6qsabreauto"
+ 	select DM
+@@ -190,6 +200,7 @@ source "board/compulab/cm_fx6/Kconfig"
+ source "board/congatec/cgtqmx6eval/Kconfig"
+ source "board/embest/mx6boards/Kconfig"
  source "board/freescale/mx6qarm2/Kconfig"
 +source "board/freescale/mx6qroj/Kconfig"
  source "board/freescale/mx6qsabreauto/Kconfig"
  source "board/freescale/mx6sabresd/Kconfig"
  source "board/freescale/mx6slevk/Kconfig"
-Index: git/board/freescale/mx6qroj/Kconfig
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/board/freescale/mx6qroj/Kconfig	2015-02-04 13:37:36.242426900 +0100
-@@ -0,0 +1,18 @@
-+if TARGET_MX6QROJ
-+
-+config SYS_CPU
-+	default "armv7"
+diff --git a/board/freescale/mx6qroj/Kconfig b/board/freescale/mx6qroj/Kconfig
+new file mode 100644
+index 0000000..7d7de8f
+--- /dev/null
++++ b/board/freescale/mx6qroj/Kconfig
+@@ -0,0 +1,12 @@
++if TARGET_MX6QROJ || TARGET_MX6DLROJ
 +
 +config SYS_BOARD
 +	default "mx6qroj"
@@ -36,32 +70,32 @@ Index: git/board/freescale/mx6qroj/Kconfig
 +config SYS_VENDOR
 +	default "freescale"
 +
-+config SYS_SOC
-+	default "mx6"
-+
 +config SYS_CONFIG_NAME
 +	default "mx6qroj"
 +
 +endif
-Index: git/board/freescale/mx6qroj/MAINTAINERS
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/board/freescale/mx6qroj/MAINTAINERS	2015-02-04 13:37:36.242426900 +0100
-@@ -0,0 +1,7 @@
+diff --git a/board/freescale/mx6qroj/MAINTAINERS b/board/freescale/mx6qroj/MAINTAINERS
+new file mode 100644
+index 0000000..238cad6
+--- /dev/null
++++ b/board/freescale/mx6qroj/MAINTAINERS
+@@ -0,0 +1,8 @@
 +MX6QROJ BOARD
-+M:	Dario Pennisi <dario@iptronix.com>
++M:	Stefano Gurrieri <stefano.gurrieri@roj.com>
 +S:	Maintained
 +F:	board/freescale/mx6qroj/
 +F:	include/configs/mx6qroj.h
 +F:	configs/mx6dlroj_defconfig
 +F:	configs/mx6qroj_defconfig
-Index: git/board/freescale/mx6qroj/Makefile
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/board/freescale/mx6qroj/Makefile	2015-02-04 13:37:36.242426900 +0100
++
+diff --git a/board/freescale/mx6qroj/Makefile b/board/freescale/mx6qroj/Makefile
+new file mode 100644
+index 0000000..97f1e0f
+--- /dev/null
++++ b/board/freescale/mx6qroj/Makefile
 @@ -0,0 +1,9 @@
 +#
-+# Copyright (C) 2014, Dario Pennisi <dario@iptronix.com>
++# Copyright (C) 2007, Stefano Gurrieri <stefano.gurrieri@roj.com>
 +#
 +# (C) Copyright 2011 Freescale Semiconductor, Inc.
 +#
@@ -69,10 +103,11 @@ Index: git/board/freescale/mx6qroj/Makefile
 +#
 +
 +obj-y  := mx6qroj.o
-Index: git/board/freescale/mx6qroj/imximage.cfg
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/board/freescale/mx6qroj/imximage.cfg	2015-02-04 13:37:36.242426900 +0100
+diff --git a/board/freescale/mx6qroj/imximage.cfg b/board/freescale/mx6qroj/imximage.cfg
+new file mode 100644
+index 0000000..57d6765
+--- /dev/null
++++ b/board/freescale/mx6qroj/imximage.cfg
 @@ -0,0 +1,132 @@
 +/*
 + * Copyright (C) 2012 Freescale Semiconductor, Inc.
@@ -206,10 +241,11 @@ Index: git/board/freescale/mx6qroj/imximage.cfg
 +DATA 4 0x020e0018 0x007F007F
 +DATA 4 0x020e001c 0x007F007F
 +
-Index: git/board/freescale/mx6qroj/mx6dl.cfg
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/board/freescale/mx6qroj/mx6dl.cfg	2015-02-04 13:37:36.242426900 +0100
+diff --git a/board/freescale/mx6qroj/mx6dl.cfg b/board/freescale/mx6qroj/mx6dl.cfg
+new file mode 100644
+index 0000000..d11256d
+--- /dev/null
++++ b/board/freescale/mx6qroj/mx6dl.cfg
 @@ -0,0 +1,119 @@
 +/*
 + * Copyright (C) 2013 Freescale Semiconductor, Inc.
@@ -282,12 +318,12 @@ Index: git/board/freescale/mx6qroj/mx6dl.cfg
 +DATA 4 0x020e0488 0x00000028
 +DATA 4 0x020e048c 0x00000028
 +DATA 4 0x021b0800 0xa1390003
-+DATA 4 0x021b080c 0x000D0016
-+DATA 4 0x021b0810 0x001D0016
-+DATA 4 0x021b083c 0x03440354
-+DATA 4 0x021b0840 0x033C033C
-+DATA 4 0x021b0848 0x4032363A
-+DATA 4 0x021b0850 0x30383432
++DATA 4 0x021b080c 0x0043004B
++DATA 4 0x021b0810 0x0038003A
++DATA 4 0x021b083c 0x030C0308
++DATA 4 0x021b0840 0x02600268
++DATA 4 0x021b0848 0x4C4E5450
++DATA 4 0x021b0850 0x3836322E
 +DATA 4 0x021b081c 0x33333333
 +DATA 4 0x021b0820 0x33333333
 +DATA 4 0x021b0824 0x33333333
@@ -302,7 +338,7 @@ Index: git/board/freescale/mx6qroj/mx6dl.cfg
 +DATA 4 0x021b001c 0x00008000
 +DATA 4 0x021b002c 0x000026d2
 +DATA 4 0x021b0030 0x00431023
-+DATA 4 0x021b0040 0x00000027
++DATA 4 0x021b0040 0x00000017
 +DATA 4 0x021b0000 0x83190000
 +DATA 4 0x021b001c 0x02008032
 +DATA 4 0x021b001c 0x00008033
@@ -311,7 +347,7 @@ Index: git/board/freescale/mx6qroj/mx6dl.cfg
 +DATA 4 0x021b001c 0x04008040
 +DATA 4 0x021b0020 0x00007800
 +DATA 4 0x021b0818 0x00022227
-+DATA 4 0x021b4818 0x00022227
++/*DATA 4 0x021b4818 0x00022227*/
 +DATA 4 0x021b0004 0x0002556D
 +DATA 4 0x021b0404 0x00011006
 +DATA 4 0x021b001c 0x00000000
@@ -330,11 +366,12 @@ Index: git/board/freescale/mx6qroj/mx6dl.cfg
 +/* set IPU AXI-id0 Qos=0xf(bypass) AXI-id1 Qos=0x7 */
 +DATA 4 0x020e0018 0x007F007F
 +DATA 4 0x020e001c 0x007F007F
-Index: git/board/freescale/mx6qroj/mx6qroj.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/board/freescale/mx6qroj/mx6qroj.c	2015-02-04 14:28:32.770426900 +0100
-@@ -0,0 +1,608 @@
+diff --git a/board/freescale/mx6qroj/mx6qroj.c b/board/freescale/mx6qroj/mx6qroj.c
+new file mode 100644
+index 0000000..a60109d
+--- /dev/null
++++ b/board/freescale/mx6qroj/mx6qroj.c
+@@ -0,0 +1,791 @@
 +/*
 + * Copyright (C) 2012 Freescale Semiconductor, Inc.
 + *
@@ -364,8 +401,11 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +#include <asm/arch/mxc_hdmi.h>
 +#include <asm/imx-common/video.h>
 +#include <asm/arch/crm_regs.h>
++#include <pca953x.h>
 +#include <power/pmic.h>
++#include <power/pfuze100_pmic.h>
 +#include <power/ltc3676_pmic.h>
++#include "../common/pfuze.h"
 +
 +DECLARE_GLOBAL_DATA_PTR;
 +
@@ -384,7 +424,20 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +	PAD_CTL_SPEED_MED | PAD_CTL_DSE_40ohm | PAD_CTL_HYS |	\
 +	PAD_CTL_ODE | PAD_CTL_SRE_FAST)
 +
++#if 0
++#define GPMI_PAD_CTRL0 (PAD_CTL_PKE | PAD_CTL_PUE | PAD_CTL_PUS_100K_UP)
++#define GPMI_PAD_CTRL1 (PAD_CTL_DSE_40ohm | PAD_CTL_SPEED_MED | \
++			PAD_CTL_SRE_FAST)
++#define GPMI_PAD_CTRL2 (GPMI_PAD_CTRL0 | GPMI_PAD_CTRL1)
++#endif
++
 +#define PC MUX_PAD_CTRL(I2C_PAD_CTRL)
++
++#define WEIM_NOR_PAD_CTRL (PAD_CTL_PKE | PAD_CTL_PUE |          \
++	PAD_CTL_PUS_100K_UP | PAD_CTL_SPEED_MED |               \
++	PAD_CTL_DSE_40ohm   | PAD_CTL_SRE_FAST)
++
++#define I2C_PMIC	1
 +
 +int dram_init(void)
 +{
@@ -413,12 +466,12 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +};
 +
 +iomux_v3_cfg_t const uart4_pads[] = {
-+        MX6_PAD_KEY_COL0__UART4_TX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL),
-+        MX6_PAD_KEY_ROW0__UART4_RX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL),
++	MX6_PAD_KEY_COL0__UART4_TX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL),
++	MX6_PAD_KEY_ROW0__UART4_RX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL),
 +};
 +
 +static iomux_v3_cfg_t const enet_pads[] = {
-+	MX6_PAD_ENET_MDIO__ENET_MDIO		| MUX_PAD_CTRL(ENET_PAD_CTRL),
++	MX6_PAD_ENET_MDIO__ENET_MDIO	| MUX_PAD_CTRL(ENET_PAD_CTRL),
 +	MX6_PAD_ENET_MDC__ENET_MDC		| MUX_PAD_CTRL(ENET_PAD_CTRL),
 +	MX6_PAD_RGMII_TXC__RGMII_TXC	| MUX_PAD_CTRL(ENET_PAD_CTRL),
 +	MX6_PAD_RGMII_TD0__RGMII_TD0	| MUX_PAD_CTRL(ENET_PAD_CTRL),
@@ -448,6 +501,7 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +                .gp = IMX_GPIO_NR(5, 26)
 +        }
 +};
++
 +/* I2C2 Camera */
 +static struct i2c_pads_info i2c_pad_info2 = {
 +        .scl = {
@@ -461,6 +515,7 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +                .gp = IMX_GPIO_NR(4, 13)
 +        }
 +};
++
 +/* I2C3 PMIC, iPod, Tuner, Codec, Touch, HDMI EDID, MIPI CSI2 card */
 +static struct i2c_pads_info i2c_pad_info3 = {
 +	.scl = {
@@ -478,6 +533,7 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +#define IOMUX_SW_PAD_CTRL_GRP_DDR_TYPE_RGMII       0x02e0790
 +#define IOMUX_SW_PAD_CTRL_GRP_DDR_TYPE_RGMII_1P2V  0x00080000
 +#define IOMUX_SW_PAD_CTRL_GRP_DDR_TYPE_RGMII_1P5V  0x000C0000
++
 +static void setup_iomux_enet(void)
 +{
 +	imx_iomux_v3_setup_multiple_pads(enet_pads, ARRAY_SIZE(enet_pads));
@@ -527,9 +583,9 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +static void setup_iomux_uart(void)
 +{
 +	imx_iomux_v3_setup_multiple_pads(uart1_pads, ARRAY_SIZE(uart1_pads));
-+        imx_iomux_v3_setup_multiple_pads(uart2_pads, ARRAY_SIZE(uart2_pads));
-+        imx_iomux_v3_setup_multiple_pads(uart3_pads, ARRAY_SIZE(uart3_pads));
-+        imx_iomux_v3_setup_multiple_pads(uart4_pads, ARRAY_SIZE(uart4_pads));
++    imx_iomux_v3_setup_multiple_pads(uart2_pads, ARRAY_SIZE(uart2_pads));
++    imx_iomux_v3_setup_multiple_pads(uart3_pads, ARRAY_SIZE(uart3_pads));
++    imx_iomux_v3_setup_multiple_pads(uart4_pads, ARRAY_SIZE(uart4_pads));
 +}
 +
 +#ifdef CONFIG_FSL_ESDHC
@@ -690,13 +746,26 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +	return 0;
 +}
 +
-+int board_eth_init(bd_t *bis)
++static void setup_fec(void)
 +{
++#if 0
++	if (is_mx6dqp()) {
++		/*
++		 * select ENET MAC0 TX clock from PLL
++		 */
++		imx_iomux_set_gpr_register(5, 9, 1, 1);
++		enable_fec_anatop_clock(0, ENET_125MHZ);
++	}
++#endif
 +	// reset PHY and ensure RX_DV is pulled high to enable TX_REF_CLK
 +	gpio_direction_input(IMX_GPIO_NR(1,4));
 +	udelay(50000);
-+
 +	setup_iomux_enet();
++}
++
++int board_eth_init(bd_t *bis)
++{
++	setup_fec();
 +
 +	return cpu_eth_init(bis);
 +}
@@ -739,8 +808,19 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +}
 +
 +#if defined(CONFIG_VIDEO_IPUV3)
++#if 0
++static void disable_lvds(struct display_info_t const *dev)
++{
++	struct iomuxc *iomux = (struct iomuxc *)IOMUXC_BASE_ADDR;
++
++	clrbits_le32(&iomux->gpr[2],
++		     IOMUXC_GPR2_LVDS_CH0_MODE_MASK |
++		     IOMUXC_GPR2_LVDS_CH1_MODE_MASK);
++}
++#endif
 +static void do_enable_hdmi(struct display_info_t const *dev)
 +{
++	//disable_lvds(dev);
 +	imx_enable_hdmi_phy();
 +}
 +
@@ -767,18 +847,70 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +} } };
 +size_t display_count = ARRAY_SIZE(displays);
 +
++#if 0
++iomux_v3_cfg_t const backlight_pads[] = {
++	MX6_PAD_SD4_DAT1__GPIO2_IO09 | MUX_PAD_CTRL(ENET_PAD_CTRL),
++};
++
++static void setup_iomux_backlight(void)
++{
++	gpio_direction_output(IMX_GPIO_NR(2, 9), 1);
++	imx_iomux_v3_setup_multiple_pads(backlight_pads,
++					 ARRAY_SIZE(backlight_pads));
++}
++#endif
 +static void setup_display(void)
 +{
 +	struct mxc_ccm_reg *mxc_ccm = (struct mxc_ccm_reg *)CCM_BASE_ADDR;
++	struct iomuxc *iomux = (struct iomuxc *)IOMUXC_BASE_ADDR;
 +	int reg;
 +
++	//setup_iomux_backlight();
 +	enable_ipu_clock();
 +	imx_setup_hdmi();
++
++	/* Turn on LDB_DI0 and LDB_DI1 clocks */
++	reg = readl(&mxc_ccm->CCGR3);
++	reg |= MXC_CCM_CCGR3_LDB_DI0_MASK | MXC_CCM_CCGR3_LDB_DI1_MASK;
++	writel(reg, &mxc_ccm->CCGR3);
++
++	/* Set LDB_DI0 and LDB_DI1 clk select to 3b'011 */
++	reg = readl(&mxc_ccm->cs2cdr);
++	reg &= ~(MXC_CCM_CS2CDR_LDB_DI0_CLK_SEL_MASK |
++		 MXC_CCM_CS2CDR_LDB_DI1_CLK_SEL_MASK);
++	reg |= (3 << MXC_CCM_CS2CDR_LDB_DI0_CLK_SEL_OFFSET) |
++	       (3 << MXC_CCM_CS2CDR_LDB_DI1_CLK_SEL_OFFSET);
++	writel(reg, &mxc_ccm->cs2cdr);
++
++	reg = readl(&mxc_ccm->cscmr2);
++	reg |= MXC_CCM_CSCMR2_LDB_DI0_IPU_DIV | MXC_CCM_CSCMR2_LDB_DI1_IPU_DIV;
++	writel(reg, &mxc_ccm->cscmr2);
 +
 +	reg = readl(&mxc_ccm->chsccdr);
 +	reg |= (CHSCCDR_CLK_SEL_LDB_DI0
 +		<< MXC_CCM_CHSCCDR_IPU1_DI0_CLK_SEL_OFFSET);
++	reg |= (CHSCCDR_CLK_SEL_LDB_DI0 <<
++		MXC_CCM_CHSCCDR_IPU1_DI1_CLK_SEL_OFFSET);
 +	writel(reg, &mxc_ccm->chsccdr);
++
++	reg = IOMUXC_GPR2_DI1_VS_POLARITY_ACTIVE_LOW |
++	      IOMUXC_GPR2_DI0_VS_POLARITY_ACTIVE_LOW |
++	      IOMUXC_GPR2_BIT_MAPPING_CH1_SPWG |
++	      IOMUXC_GPR2_DATA_WIDTH_CH1_18BIT |
++	      IOMUXC_GPR2_BIT_MAPPING_CH0_SPWG |
++	      IOMUXC_GPR2_DATA_WIDTH_CH0_18BIT |
++	      IOMUXC_GPR2_LVDS_CH0_MODE_ENABLED_DI0 |
++	      IOMUXC_GPR2_LVDS_CH1_MODE_DISABLED;
++	writel(reg, &iomux->gpr[2]);
++
++	reg = readl(&iomux->gpr[3]);
++	reg &= ~(IOMUXC_GPR3_LVDS0_MUX_CTL_MASK |
++		 IOMUXC_GPR3_HDMI_MUX_CTL_MASK);
++	reg |= (IOMUXC_GPR3_MUX_SRC_IPU1_DI0 <<
++		IOMUXC_GPR3_LVDS0_MUX_CTL_OFFSET) |
++	       (IOMUXC_GPR3_MUX_SRC_IPU1_DI0 <<
++		IOMUXC_GPR3_HDMI_MUX_CTL_OFFSET);
++	writel(reg, &iomux->gpr[3]);
 +}
 +#endif /* CONFIG_VIDEO_IPUV3 */
 +
@@ -793,7 +925,6 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +
 +int board_early_init_f(void)
 +{
-+
 +	// assert carrier_pwr_ok to allow UART to be visible
 +	gpio_direction_output(IMX_GPIO_NR(4, 5), 1); 
 +	// Reset PHY and ensure RX_DV is pulled high to enable REF_CLK
@@ -845,25 +976,25 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +	/* address of boot parameters */
 +	gd->bd->bi_boot_params = PHYS_SDRAM + 0x100;
 +
-+        /* I2C 1 setup */
-+        setup_i2c(0, CONFIG_SYS_I2C_SPEED, 0x7f, &i2c_pad_info1);
-+        /* I2C 2 setup */
-+        setup_i2c(1, CONFIG_SYS_I2C_SPEED, 0x7f, &i2c_pad_info2);
-+        /* I2C 3 setup */
-+        setup_i2c(2, CONFIG_SYS_I2C_SPEED, 0x7f, &i2c_pad_info3);
-+        /* USB HUB reset */
-+        gpio_direction_output(IMX_GPIO_NR(7,8),0);
-+        udelay(1);
-+        gpio_direction_output(IMX_GPIO_NR(7,8),1);
-+	       /* USB HUB initialization */
-+	       I2C_SET_BUS(2);
-+	       i2c_write(0x2c,0,1,usb_init_blob, sizeof(usb_init_blob));
-+        i2c_write(0x2c,0xff,1,usb_init_blob2, sizeof(usb_init_blob2));
-+	       /* Remove Carrier from Reset*/
-+	       i2c_write(0x1,0,1,CPLD_init_blob, sizeof(CPLD_init_blob));
-+	       /* Turn on LCD panel*/
-+        gpio_direction_output(IMX_GPIO_NR(1, 0), 1); 
-+        gpio_direction_output(IMX_GPIO_NR(1, 2), 1); 
++	/* I2C 1 setup */
++    setup_i2c(0, CONFIG_SYS_I2C_SPEED, 0x7f, &i2c_pad_info1);
++    /* I2C 2 setup */
++    setup_i2c(1, CONFIG_SYS_I2C_SPEED, 0x7f, &i2c_pad_info2);
++    /* I2C 3 setup */
++    setup_i2c(2, CONFIG_SYS_I2C_SPEED, 0x7f, &i2c_pad_info3);
++    /* USB HUB reset */
++    gpio_direction_output(IMX_GPIO_NR(7,8),0);
++    udelay(1);
++    gpio_direction_output(IMX_GPIO_NR(7,8),1);
++    /* USB HUB initialization */
++    I2C_SET_BUS(2);
++    i2c_write(0x2c,0,1,usb_init_blob, sizeof(usb_init_blob));
++    i2c_write(0x2c,0xff,1,usb_init_blob2, sizeof(usb_init_blob2));
++    /* Remove Carrier from Reset*/
++    i2c_write(0x1,0,1,CPLD_init_blob, sizeof(CPLD_init_blob));
++    /* Turn on LCD panel*/
++    gpio_direction_output(IMX_GPIO_NR(1, 0), 1); 
++    gpio_direction_output(IMX_GPIO_NR(1, 2), 1); 
 +
 +#if 1
 +	power_ltc3676_init(2);
@@ -901,6 +1032,28 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +}
 +#endif
 +
++#if 0
++int power_init_board(void)
++{
++	struct pmic *p;
++	unsigned int value;
++
++	p = pfuze_common_init(I2C_PMIC);
++	if (!p)
++		return -ENODEV;
++
++	if (is_mx6dqp()) {
++		/* set SW2 staby volatage 0.975V*/
++		pmic_reg_read(p, PFUZE100_SW2STBY, &value);
++		value &= ~0x3f;
++		value |= 0x17;
++		pmic_reg_write(p, PFUZE100_SW2STBY, value);
++	}
++
++	return pfuze_mode_init(p, APS_PFM);
++}
++#endif
++
 +#ifdef CONFIG_CMD_BMODE
 +static const struct boot_mode board_boot_modes[] = {
 +	/* 4 bit bus width */
@@ -918,9 +1071,20 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +	add_board_boot_modes(board_boot_modes);
 +#endif
 +
-+#ifdef CONFIG_ENV_IS_IN_MMC
-+	board_late_mmc_env_init();
++#ifdef CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG
++	setenv("board_name", "EZ-ROJ-1");
++
++	if (is_mx6dqp())
++		setenv("board_rev", "MX6QP");
++	else if (is_cpu_type(MXC_CPU_MX6Q) || is_cpu_type(MXC_CPU_MX6D))
++		setenv("board_rev", "MX6Q");
++	else if (is_cpu_type(MXC_CPU_MX6DL) || is_cpu_type(MXC_CPU_MX6SOLO))
++		setenv("board_rev", "MX6DL");
 +#endif
++
++	#ifdef CONFIG_ENV_IS_IN_MMC
++		board_late_mmc_env_init();
++	#endif
 +	return 0;
 +}
 +
@@ -943,27 +1107,98 @@ Index: git/board/freescale/mx6qroj/mx6qroj.c
 +
 +	return 0;
 +}
-Index: git/configs/mx6dlroj_defconfig
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/configs/mx6dlroj_defconfig	2015-02-04 13:37:36.246426900 +0100
-@@ -0,0 +1,3 @@
-+CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6qroj/mx6dl.cfg,MX6DL"
++
++#if 0
++#ifdef CONFIG_USB_EHCI_MX6
++#define USB_HOST1_PWR     PORTEXP_IO_NR(0x32, 7)
++#define USB_OTG_PWR       PORTEXP_IO_NR(0x34, 1)
++
++iomux_v3_cfg_t const usb_otg_pads[] = {
++	MX6_PAD_ENET_RX_ER__USB_OTG_ID | MUX_PAD_CTRL(NO_PAD_CTRL),
++};
++
++int board_ehci_hcd_init(int port)
++{
++	switch (port) {
++	case 0:
++		imx_iomux_v3_setup_multiple_pads(usb_otg_pads,
++			ARRAY_SIZE(usb_otg_pads));
++
++		/*
++		  * Set daisy chain for otg_pin_id on 6q.
++		 *  For 6dl, this bit is reserved.
++		 */
++		imx_iomux_set_gpr_register(1, 13, 1, 0);
++		break;
++	case 1:
++		break;
++	default:
++		printf("MXC USB port %d not yet supported\n", port);
++		return -EINVAL;
++	}
++	return 0;
++}
++
++int board_ehci_power(int port, int on)
++{
++	switch (port) {
++	case 0:
++		if (on)
++			port_exp_direction_output(USB_OTG_PWR, 1);
++		else
++			port_exp_direction_output(USB_OTG_PWR, 0);
++		break;
++	case 1:
++		if (on)
++			port_exp_direction_output(USB_HOST1_PWR, 1);
++		else
++			port_exp_direction_output(USB_HOST1_PWR, 0);
++		break;
++	default:
++		printf("MXC USB port %d not yet supported\n", port);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++#endif
++#endif
+diff --git a/configs/mx6dlroj_defconfig b/configs/mx6dlroj_defconfig
+new file mode 100644
+index 0000000..c38df87
+--- /dev/null
++++ b/configs/mx6dlroj_defconfig
+@@ -0,0 +1,9 @@
 +CONFIG_ARM=y
++CONFIG_ARCH_MX6=y
 +CONFIG_TARGET_MX6DLROJ=y
-Index: git/configs/mx6qroj_defconfig
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/configs/mx6qroj_defconfig	2015-02-04 13:37:36.246426900 +0100
-@@ -0,0 +1,3 @@
-+CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6qroj/imximage.cfg,MX6Q"
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6qroj/mx6dl.cfg,MX6DL"
++# CONFIG_CMD_IMLS is not set
++# CONFIG_CMD_FLASH is not set
++CONFIG_CMD_GPIO=y
++CONFIG_SPI_FLASH=y
++CONFIG_SPI_FLASH_STMICRO=y
+diff --git a/configs/mx6qroj_defconfig b/configs/mx6qroj_defconfig
+new file mode 100644
+index 0000000..6e8f612
+--- /dev/null
++++ b/configs/mx6qroj_defconfig
+@@ -0,0 +1,9 @@
 +CONFIG_ARM=y
++CONFIG_ARCH_MX6=y
 +CONFIG_TARGET_MX6QROJ=y
-Index: git/include/configs/mx6qroj.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/include/configs/mx6qroj.h	2015-02-04 13:37:36.246426900 +0100
-@@ -0,0 +1,53 @@
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6qroj/imximage.cfg,MX6Q"
++# CONFIG_CMD_IMLS is not set
++# CONFIG_CMD_FLASH is not set
++CONFIG_CMD_GPIO=y
++CONFIG_SPI_FLASH=y
++CONFIG_SPI_FLASH_STMICRO=y
+diff --git a/include/configs/mx6qroj.h b/include/configs/mx6qroj.h
+new file mode 100644
+index 0000000..a865678
+--- /dev/null
++++ b/include/configs/mx6qroj.h
+@@ -0,0 +1,90 @@
 +/*
 + * Copyright (C) 2012 Freescale Semiconductor, Inc.
 + *
@@ -978,13 +1213,13 @@ Index: git/include/configs/mx6qroj.h
 +#define CONFIG_MACH_TYPE	3529
 +#define CONFIG_MXC_UART_BASE	UART2_BASE
 +#define CONFIG_CONSOLE_DEV		"ttymxc1"
-+#if defined CONFIG_MX6Q
-+#define CONFIG_DEFAULT_FDT_FILE	"imx6q-roj.dtb"
-+#elif defined CONFIG_MX6DL
-+#define CONFIG_DEFAULT_FDT_FILE	"imx6dl-roj.dtb"
-+#endif
 +#define CONFIG_MMCROOT			"/dev/mmcblk0p2"
++
++#if defined CONFIG_MX6Q
 +#define PHYS_SDRAM_SIZE		(1u * 1024 * 1024 * 1024)
++#elif defined CONFIG_MX6DL
++#define PHYS_SDRAM_SIZE		(1u * 512 * 1024 * 1024)
++#endif
 +
 +/* USB Configs */
 +#define CONFIG_CMD_USB
@@ -998,34 +1233,72 @@ Index: git/include/configs/mx6qroj.h
 +#define CONFIG_MXC_USB_PORTSC	(PORT_PTS_UTMI | PORT_PTS_PTW)
 +#define CONFIG_MXC_USB_FLAGS	0
 +
++#define CONFIG_PCA953X
++#define CONFIG_SYS_I2C_PCA953X_WIDTH	{ {0x30, 8}, {0x32, 8}, {0x34, 8} }
++
 +#include "mx6roj_common.h"
++
++#if 0
++#undef CONFIG_SYS_NO_FLASH
++#define CONFIG_SYS_FLASH_BASE           WEIM_ARB_BASE_ADDR
++#define CONFIG_SYS_FLASH_SECT_SIZE      (128 * 1024)
++#define CONFIG_SYS_MAX_FLASH_BANKS 1    /* max number of memory banks */
++#define CONFIG_SYS_MAX_FLASH_SECT 256   /* max number of sectors on one chip */
++#define CONFIG_SYS_FLASH_CFI            /* Flash memory is CFI compliant */
++#define CONFIG_FLASH_CFI_DRIVER         /* Use drivers/cfi_flash.c */
++#define CONFIG_SYS_FLASH_USE_BUFFER_WRITE /* Use buffered writes*/
++#define CONFIG_SYS_FLASH_EMPTY_INFO
++#endif
 +
 +#define CONFIG_SYS_FSL_USDHC_NUM	3
 +#if defined(CONFIG_ENV_IS_IN_MMC)
 +#define CONFIG_SYS_MMC_ENV_DEV		1
 +#endif
 +
++/* I2C Configs */
++#define CONFIG_CMD_I2C
++#define CONFIG_SYS_I2C
++#define CONFIG_SYS_I2C_MXC
++#define CONFIG_SYS_I2C_MXC_I2C1		/* enable I2C bus 1 */
++#define CONFIG_SYS_I2C_MXC_I2C2		/* enable I2C bus 2 */
++#define CONFIG_SYS_I2C_MXC_I2C3		/* enable I2C bus 3 */
++#define CONFIG_SYS_I2C_SPEED		100000
++
++#if 0
++/* NAND flash command */
++#define CONFIG_CMD_NAND
++#define CONFIG_CMD_NAND_TRIMFFS
++
++/* NAND stuff */
++#define CONFIG_NAND_MXS
++#define CONFIG_SYS_MAX_NAND_DEVICE     1
++#define CONFIG_SYS_NAND_BASE           0x40000000
++#define CONFIG_SYS_NAND_5_ADDR_CYCLE
++#define CONFIG_SYS_NAND_ONFI_DETECTION
++
++/* DMA stuff, needed for GPMI/MXS NAND support */
++#define CONFIG_APBH_DMA
++#define CONFIG_APBH_DMA_BURST
++#define CONFIG_APBH_DMA_BURST8
++#endif
++
++/* PMIC */
 +#define CONFIG_POWER
 +#define CONFIG_POWER_I2C
 +#define CONFIG_POWER_LTC3676
 +#define CONFIG_POWER_LTC3676_I2C_ADDR 0x3c
 +
-+/* I2C Configs */
-+#define CONFIG_CMD_I2C
-+#define CONFIG_SYS_I2C
-+#define CONFIG_SYS_I2C_MXC
-+#define CONFIG_SYS_I2C_SPEED		100000
-+
 +#endif                         /* __MX6QROJ_CONFIG_H */
-Index: git/include/configs/mx6roj_common.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git/include/configs/mx6roj_common.h	2015-02-04 14:21:45.726426900 +0100
-@@ -0,0 +1,294 @@
+diff --git a/include/configs/mx6roj_common.h b/include/configs/mx6roj_common.h
+new file mode 100644
+index 0000000..eb1ef57
+--- /dev/null
++++ b/include/configs/mx6roj_common.h
+@@ -0,0 +1,292 @@
 +/*
 + * Copyright (C) 2012 Freescale Semiconductor, Inc.
 + *
-+ * Configuration settings for the Freescale i.MX6Q SabreSD board.
++ * Configuration settings for the ROJ i.MX6Q board.
 + *
 + * SPDX-License-Identifier:	GPL-2.0+
 + */
@@ -1033,37 +1306,17 @@ Index: git/include/configs/mx6roj_common.h
 +#ifndef __MX6QROJ_COMMON_CONFIG_H
 +#define __MX6QROJ_COMMON_CONFIG_H
 +
-+#define CONFIG_MX6
-+
 +#include "mx6_common.h"
-+#include <linux/sizes.h>
 +
-+#define CONFIG_DISPLAY_CPUINFO
-+#define CONFIG_DISPLAY_BOARDINFO
-+
-+#include <asm/arch/imx-regs.h>
-+#include <asm/imx-common/gpio.h>
-+
-+#define CONFIG_CMDLINE_TAG
-+#define CONFIG_SETUP_MEMORY_TAGS
-+#define CONFIG_INITRD_TAG
-+#define CONFIG_REVISION_TAG
-+
-+#define CONFIG_SYS_GENERIC_BOARD
++#define CONFIG_IMX_THERMAL
 +
 +/* Size of malloc() pool */
 +#define CONFIG_SYS_MALLOC_LEN		(10 * SZ_1M)
 +
 +#define CONFIG_BOARD_EARLY_INIT_F
 +#define CONFIG_BOARD_LATE_INIT
-+#define CONFIG_MXC_GPIO
 +
 +#define CONFIG_MXC_UART
-+
-+#define CONFIG_CMD_FUSE
-+#ifdef CONFIG_CMD_FUSE
-+#define CONFIG_MXC_OCOTP
-+#endif
 +
 +#define CONFIG_CMD_SATA
 +/*
@@ -1079,22 +1332,11 @@ Index: git/include/configs/mx6roj_common.h
 +#endif
 +
 +/* MMC Configs */
-+#define CONFIG_FSL_ESDHC
-+#define CONFIG_FSL_USDHC
 +#define CONFIG_SYS_FSL_ESDHC_ADDR      0
-+
-+#define CONFIG_MMC
-+#define CONFIG_CMD_MMC
-+#define CONFIG_GENERIC_MMC
-+#define CONFIG_BOUNCE_BUFFER
-+#define CONFIG_CMD_EXT2
-+#define CONFIG_CMD_FAT
-+#define CONFIG_DOS_PARTITION
 +
 +#define CONFIG_CMD_PING
 +#define CONFIG_CMD_DHCP
 +#define CONFIG_CMD_MII
-+#define CONFIG_CMD_NET
 +#define CONFIG_FEC_MXC
 +#define CONFIG_MII
 +#define IMX_FEC_BASE			ENET_BASE_ADDR
@@ -1104,10 +1346,9 @@ Index: git/include/configs/mx6roj_common.h
 +
 +#define CONFIG_PHYLIB
 +#define CONFIG_PHY_MICREL
++
 +#define CONFIG_CMD_SF
 +#ifdef CONFIG_CMD_SF
-+#define CONFIG_SPI_FLASH
-+#define CONFIG_SPI_FLASH_STMICRO
 +#define CONFIG_MXC_SPI
 +#define CONFIG_SF_DEFAULT_BUS		0
 +#define CONFIG_SF_DEFAULT_CS		0
@@ -1115,23 +1356,8 @@ Index: git/include/configs/mx6roj_common.h
 +#define CONFIG_SF_DEFAULT_MODE		SPI_MODE_0
 +#endif
 +
-+/* allow to overwrite serial and ethaddr */
-+#define CONFIG_ENV_OVERWRITE
-+#define CONFIG_CONS_INDEX              1
-+#define CONFIG_BAUDRATE                        115200
-+
 +/* Command definition */
-+#include <config_cmd_default.h>
-+
 +#define CONFIG_CMD_BMODE
-+#define CONFIG_CMD_BOOTZ
-+#define CONFIG_CMD_SETEXPR
-+#undef CONFIG_CMD_IMLS
-+
-+#define CONFIG_BOOTDELAY               1
-+
-+#define CONFIG_LOADADDR                        0x12000000
-+#define CONFIG_SYS_TEXT_BASE           0x17800000
 +
 +#ifdef CONFIG_SUPPORT_EMMC_BOOT
 +#define EMMC_ENV \
@@ -1143,26 +1369,38 @@ Index: git/include/configs/mx6roj_common.h
 +			"setenv get_cmd tftp; " \
 +		"fi; " \
 +		"if ${get_cmd} ${update_sd_firmware_filename}; then " \
-+			"if mmc dev ${emmcdev} && " \
-+				"mmc open ${emmcdev} 1; then "	\
++			"if mmc dev ${emmcdev} 1; then "	\
 +				"setexpr fw_sz ${filesize} / 0x200; " \
 +				"setexpr fw_sz ${fw_sz} + 1; "	\
 +				"mmc write ${loadaddr} 0x2 ${fw_sz}; " \
-+				"mmc close ${emmcdev} 1; " \
 +			"fi; "	\
 +		"fi\0"
 +#else
 +#define EMMC_ENV ""
 +#endif
 +
++#define CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG
++
++#ifndef VIDEO_ARGS
++#define VIDEO_ARGS ""
++#endif
++
++#ifndef VIDEO_ARGS_SCRIPT
++#define VIDEO_ARGS_SCRIPT ""
++#endif
++
 +#define CONFIG_EXTRA_ENV_SETTINGS \
 +	"script=boot.scr\0" \
 +	"image=zImage\0" \
-+	"fdt_file=" CONFIG_DEFAULT_FDT_FILE "\0" \
++	"fdt_file=undefined\0" \
 +	"fdt_addr=0x18000000\0" \
 +	"boot_fdt=try\0" \
 +	"ip_dyn=yes\0" \
 +	"console=" CONFIG_CONSOLE_DEV "\0" \
++	"dfuspi=dfu 0 sf 0:0:10000000:0\0" \
++	"dfu_alt_info_spl=spl raw 0x400\0" \
++	"dfu_alt_info_img=u-boot raw 0x10000\0" \
++	"dfu_alt_info=spl raw 0x400\0" \
 +	"fdt_high=0xffffffff\0"	  \
 +	"initrd_high=0xffffffff\0" \
 +	"mmcdev=" __stringify(CONFIG_SYS_MMC_ENV_DEV) "\0" \
@@ -1183,9 +1421,23 @@ Index: git/include/configs/mx6roj_common.h
 +			"fi; "	\
 +		"fi\0" \
 +	EMMC_ENV	  \
-+ "mmcsetroot=setenv mmcroot /dev/mmcblk${mmcdev}p${mmcrootpart} rootwait rw\0" \
++	"video_args_hdmi=setenv video_args $video_args " \
++		"video=mxcfb${fb}:dev=hdmi,1280x720M@60,if=RGB24\0" \
++	"video_args_lvds=setenv video_args $video_args " \
++		"video=mxcfb${fb}:dev=ldb,LDB-XGA,if=RGB666\0" \
++	"video_args_lcd=setenv video_args $video_args " \
++		"video=mxcfb${fb}:dev=lcd,CLAA-WVGA,if=RGB666\0" \
++	"fb=0\0" \
++	"video_interfaces=hdmi lvds lcd\0" \
++	"video_args_script=" \
++		"for v in ${video_interfaces}; do " \
++			"run video_args_${v}; " \
++			"setexpr fb $fb + 1; " \
++		"done\0" \
++ 	"mmcsetroot=setenv mmcroot /dev/mmcblk${mmcdev}p${mmcrootpart} rootwait rw\0" \
 +	"mmcargs=run mmcsetroot;setenv bootargs console=${console},${baudrate} " \
-+		"root=${mmcroot}\0" \
++		"root=${mmcroot} " \
++		VIDEO_ARGS "\0" \
 +	"loadbootscript=" \
 +		"fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script};\0" \
 +	"bootscript=echo Running bootscript from mmc ...; " \
@@ -1193,6 +1445,7 @@ Index: git/include/configs/mx6roj_common.h
 +	"loadimage=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}\0" \
 +	"loadfdt=fatload mmc ${mmcdev}:${mmcpart} ${fdt_addr} ${fdt_file}\0" \
 +	"mmcboot=echo Booting from mmc ...; " \
++		VIDEO_ARGS_SCRIPT \
 +		"run mmcargs; " \
 +		"if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
 +			"if run loadfdt; then " \
@@ -1230,9 +1483,22 @@ Index: git/include/configs/mx6roj_common.h
 +			"fi; " \
 +		"else " \
 +			"bootz; " \
-+		"fi;\0"
++		"fi;\0" \
++		"findfdt="\
++			"if test $fdt_file = undefined; then " \
++				"if test $board_name = EZ-ROJ-1 && test $board_rev = MX6QP; then " \
++					"setenv fdt_file imx6qp-roj.dtb; fi; " \
++				"if test $board_name = EZ-ROJ-1 && test $board_rev = MX6Q; then " \
++					"setenv fdt_file imx6q-roj.dtb; fi; " \
++				"if test $board_name = EZ-ROJ-1 && test $board_rev = MX6DL; then " \
++					"setenv fdt_file imx6dl-roj.dtb; fi; " \
++				"if test $fdt_file = undefined; then " \
++					"echo WARNING: Could not determine dtb to use; fi; " \
++			"fi;\0" \
++
 +
 +#define CONFIG_BOOTCOMMAND \
++	"run findfdt;" \
 +	"mmc dev ${mmcdev};" \
 +	"if mmc rescan; then " \
 +		"if run loadbootscript; then " \
@@ -1247,25 +1513,10 @@ Index: git/include/configs/mx6roj_common.h
 +
 +#define CONFIG_ARP_TIMEOUT     200UL
 +
-+/* Miscellaneous configurable options */
-+#define CONFIG_SYS_LONGHELP
-+#define CONFIG_SYS_HUSH_PARSER
-+#define CONFIG_SYS_PROMPT_HUSH_PS2     "> "
-+#define CONFIG_AUTO_COMPLETE
-+#define CONFIG_SYS_CBSIZE              256
-+
-+/* Print Buffer Size */
-+#define CONFIG_SYS_PBSIZE (CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
-+#define CONFIG_SYS_MAXARGS             16
-+#define CONFIG_SYS_BARGSIZE CONFIG_SYS_CBSIZE
-+
 +#define CONFIG_SYS_MEMTEST_START       0x10000000
 +#define CONFIG_SYS_MEMTEST_END         0x10010000
 +#define CONFIG_SYS_MEMTEST_SCRATCH     0x10800000
 +
-+#define CONFIG_SYS_LOAD_ADDR           CONFIG_LOADADDR
-+
-+#define CONFIG_CMDLINE_EDITING
 +#define CONFIG_STACKSIZE               (128 * 1024)
 +
 +/* Physical Memory Map */
@@ -1281,21 +1532,13 @@ Index: git/include/configs/mx6roj_common.h
 +#define CONFIG_SYS_INIT_SP_ADDR \
 +	(CONFIG_SYS_INIT_RAM_ADDR + CONFIG_SYS_INIT_SP_OFFSET)
 +
-+/* FLASH and environment organization */
-+#define CONFIG_SYS_NO_FLASH
-+
++/* Environment organization */
 +#define CONFIG_ENV_SIZE			(8 * 1024)
 +
 +#define CONFIG_ENV_IS_IN_MMC
 +
 +#if defined(CONFIG_ENV_IS_IN_MMC)
-+#define CONFIG_ENV_OFFSET		(6 * 64 * 1024)
-+#endif
-+
-+#define CONFIG_OF_LIBFDT
-+
-+#ifndef CONFIG_SYS_DCACHE_OFF
-+#define CONFIG_CMD_CACHE
++#define CONFIG_ENV_OFFSET		(768 * 1024)
 +#endif
 +
 +/* Framebuffer */
@@ -1315,4 +1558,35 @@ Index: git/include/configs/mx6roj_common.h
 +#define CONFIG_IMX_HDMI
 +#define CONFIG_IMX_VIDEO_SKIP
 +
++#ifndef CONFIG_SPL
++#define CONFIG_CI_UDC
++#define CONFIG_USBD_HS
++#define CONFIG_USB_GADGET_DUALSPEED
++
++#define CONFIG_USB_GADGET
++#define CONFIG_CMD_USB_MASS_STORAGE
++#define CONFIG_USB_FUNCTION_MASS_STORAGE
++#define CONFIG_USB_GADGET_DOWNLOAD
++#define CONFIG_USB_GADGET_VBUS_DRAW	2
++
++#define CONFIG_G_DNL_VENDOR_NUM		0x0525
++#define CONFIG_G_DNL_PRODUCT_NUM	0xa4a5
++#define CONFIG_G_DNL_MANUFACTURER	"FSL"
++
++#define CONFIG_USB_FUNCTION_FASTBOOT
++#define CONFIG_CMD_FASTBOOT
++#define CONFIG_ANDROID_BOOT_IMAGE
++#define CONFIG_FASTBOOT_BUF_ADDR   CONFIG_SYS_LOAD_ADDR
++#define CONFIG_FASTBOOT_BUF_SIZE   0x07000000
++
++/* USB Device Firmware Update support */
++#define CONFIG_CMD_DFU
++#define CONFIG_USB_FUNCTION_DFU
++#define CONFIG_DFU_MMC
++#define CONFIG_DFU_SF
++#endif
++
 +#endif                         /* __MX6QROJ_COMMON_CONFIG_H */
+-- 
+1.9.1
+

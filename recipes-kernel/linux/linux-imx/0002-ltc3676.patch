@@ -1,5 +1,19 @@
+From d3e8d839b984733983a0e73a93ded2a6ac285cad Mon Sep 17 00:00:00 2001
+From: Stefano Gurrieri <stefano.gurrieri@roj.com>
+Date: Tue, 31 May 2016 09:23:55 +0200
+Subject: [PATCH] ltc3676
+
+---
+ .../devicetree/bindings/regulator/ltc3676.txt      | 104 +++++
+ drivers/regulator/Kconfig                          |   7 +
+ drivers/regulator/Makefile                         |   1 +
+ drivers/regulator/ltc3676.c                        | 507 +++++++++++++++++++++
+ 4 files changed, 619 insertions(+)
+ create mode 100755 Documentation/devicetree/bindings/regulator/ltc3676.txt
+ create mode 100755 drivers/regulator/ltc3676.c
+
 diff --git a/Documentation/devicetree/bindings/regulator/ltc3676.txt b/Documentation/devicetree/bindings/regulator/ltc3676.txt
-new file mode 100644
+new file mode 100755
 index 0000000..1fd4c26
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/regulator/ltc3676.txt
@@ -109,12 +123,12 @@ index 0000000..1fd4c26
 +	};
 +
 diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index 5b64f2c..af8a850 100644
+index a2ac2cc..eb7b7a1 100644
 --- a/drivers/regulator/Kconfig
 +++ b/drivers/regulator/Kconfig
-@@ -526,5 +526,12 @@ config REGULATOR_AS3711
- 	  This driver provides support for the voltage regulators on the
- 	  AS3711 PMIC
+@@ -308,6 +308,13 @@ config REGULATOR_LTC3589
+ 	  This enables support for the LTC3589, LTC3589-1, and LTC3589-2
+ 	  8-output regulators controlled via I2C.
  
 +config REGULATOR_LTC3676
 +	tristate "LTC3676 regulator driver"
@@ -123,22 +137,23 @@ index 5b64f2c..af8a850 100644
 +	help
 +	  Say y here to support for the LTC3676 regulators controlled via I2C.
 +
- endif
- 
+ config REGULATOR_MAX14577
+ 	tristate "Maxim 14577/77836 regulator"
+ 	depends on MFD_MAX14577
 diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index 5234d87..12c9ea0 100644
+index 8e9893d..3b27569 100644
 --- a/drivers/regulator/Makefile
 +++ b/drivers/regulator/Makefile
-@@ -31,6 +31,7 @@ obj-$(CONFIG_REGULATOR_LP872X) += lp872x.o
- obj-$(CONFIG_REGULATOR_LP8788) += lp8788-buck.o
+@@ -42,6 +42,7 @@ obj-$(CONFIG_REGULATOR_LP8788) += lp8788-buck.o
  obj-$(CONFIG_REGULATOR_LP8788) += lp8788-ldo.o
  obj-$(CONFIG_REGULATOR_LP8755) += lp8755.o
+ obj-$(CONFIG_REGULATOR_LTC3589) += ltc3589.o
 +obj-$(CONFIG_REGULATOR_LTC3676) += ltc3676.o
+ obj-$(CONFIG_REGULATOR_MAX14577) += max14577.o
  obj-$(CONFIG_REGULATOR_MAX1586) += max1586.o
  obj-$(CONFIG_REGULATOR_MAX17135) += max17135-regulator.o
- obj-$(CONFIG_REGULATOR_MAX8649)	+= max8649.o
 diff --git a/drivers/regulator/ltc3676.c b/drivers/regulator/ltc3676.c
-new file mode 100644
+new file mode 100755
 index 0000000..220260e
 --- /dev/null
 +++ b/drivers/regulator/ltc3676.c
@@ -650,3 +665,6 @@ index 0000000..220260e
 +MODULE_LICENSE("GPL v2");
 +MODULE_ALIAS("i2c:ltc3676");
 +
+-- 
+1.9.1
+
