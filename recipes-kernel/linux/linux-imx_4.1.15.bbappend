@@ -14,6 +14,7 @@ SRC_URI_append_mx6qroj = " \
    file://0006-add-sn8000-support.patch \
    file://0007-sdio_pwr_en_on.patch \
    file://0008-add_delay_wifi_regulator.patch \
+   file://0009-dts.patch \
    file://brcmfmac43362-sdio.bin \
    file://brcmfmac43362-sdio.txt \
    file://defconfig \
